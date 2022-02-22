@@ -9,62 +9,57 @@ import (
 )
 
 var (
-	antnumber  string
-	startline  int
-	endline    int
-	endroom    string
-	slccontent []string
+	antnumber           string
+	startline           int
+	endline             int
+	endroom             string
+	slccontent          []string
+	connectionStartLine int
+	RoomsandConnections []string
 )
 
 func readnote(textfile string) {
-	// f, err := os.Open("examples/" + textfile)
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// }
-	// defer f.Close()
-
-	// scanner := bufio.NewScanner(f)
-	// var line int
-	// var line2 int
-	// var line3 int
-	// var line4 int
-	// for scanner.Scan() {
-	// 	if line == 0 {
-	// 		antnumber = scanner.Text()
-	// 	}
-	// 	line++
-	// 	if strings.Contains(scanner.Text(), "##start") {
-	// 		startline = line2+1
-	// 	}
-	// 	line2++
-
-	// 	if strings.Contains(scanner.Text(), "##end") {
-	// 		endline = line3+1
-	// 	}
-	// 	line3++
-
-	// 	if line == endline+1 {
-	// 		endroom = scanner.Text()
-	// 	}
-	// 	line4++
-	// }
-
-	// if err := scanner.Err(); err != nil {
-	// 	log.Fatalln(err)
-	// }
-
 	content, err := ioutil.ReadFile("examples/" + textfile)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	slccontent = strings.Split(string(content), "\n")
-	for i := 0; i < len(slccontent); i++ {
-		if slccontent[i] == "##start" {
-			startline = i
+	for l := 0; l < len(slccontent); l++ {
+		for t := 0; t < len(slccontent[l]); t++ {
+			if string(slccontent[l][0]) == "#" {
+				if string(slccontent[l][1]) != "#" {
+					slccontent = append(slccontent[:l], slccontent[l+1:]...)
+				}
+				for i := 0; i < len(slccontent); i++ {
+					if slccontent[i] == "##start" {
+						startline = i
+					}
+					if slccontent[i] == "##end" {
+						endline = i
+					}
+				}
+			}
 		}
-		if slccontent[i] == "##end" {
-			endline = i
+	}
+	RoomsandConnections = strings.Split(string(content), "\n")
+	RoomsandConnections = append(RoomsandConnections[:endline], RoomsandConnections[endline+2:]...)
+
+	for l := 0; l < len(RoomsandConnections); l++ {
+		for t := 0; t < len(RoomsandConnections[l]); t++ {
+			if string(RoomsandConnections[l][0]) == "#" {
+				if string(RoomsandConnections[l][1]) != "#" {
+					RoomsandConnections = append(RoomsandConnections[:l], RoomsandConnections[l+1:]...)
+				}
+			}
+		}
+	}
+	for m := len(RoomsandConnections) - 1; m >= 0; m-- {
+		for k := 0; k < len(RoomsandConnections[m]); k++ {
+			if string(RoomsandConnections[m][k]) == "-" {
+				connectionStartLine = m
+				break
+			}
 		}
 	}
 }
@@ -72,15 +67,13 @@ func readnote(textfile string) {
 func main() {
 	readnote(os.Args[1])
 	fmt.Println("ant number:", slccontent[0])
-
-	fmt.Println("startline:", startline)
 	fmt.Println("startroom:", slccontent[startline+1])
-	for i := 3; i < endline; i++ {
-		fmt.Println("rooms:", slccontent[i])
+	for i := 3; i < connectionStartLine; i++ {
+		fmt.Println("other rooms:", RoomsandConnections[i])
 	}
 	fmt.Println("endline:", endline)
 	fmt.Println("endroom:", slccontent[endline+1])
-	for k := endline + 2; k < len(slccontent); k++ {
-		fmt.Println("connections:", slccontent[k])
+	for m := connectionStartLine; m < len(RoomsandConnections); m++ {
+		fmt.Println("connections:", RoomsandConnections[m])
 	}
 }
