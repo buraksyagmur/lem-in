@@ -71,11 +71,13 @@ func readnote(textfile string) {
 	}
 }
 
-func createRoomNode(name string, p, l, r room) {
-	var newRoom room
-	newRoom.parent = p
-	newRoom.leftChild = l
-	newRoom.rightSib = r
+func createRoomNode(name string, p, l, r *room) {
+	newRoom := room{
+		name:      name,
+		parent:    p,
+		leftChild: l,
+		rightSib:  r,
+	}
 }
 
 func main() {
