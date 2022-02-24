@@ -10,10 +10,8 @@ import (
 )
 
 var (
-	antnumber           string
 	startline           int
 	endline             int
-	endroom             string
 	slccontent          []string
 	connectionStartLine int
 	RoomsandConnections []string
