@@ -18,6 +18,13 @@ var (
 	RoomsandConnections []string
 )
 
+type room struct {
+	name      string
+	parent    *room
+	leftChild *room
+	rightSib  *room
+}
+
 func readnote(textfile string) {
 	content, err := ioutil.ReadFile("examples/" + textfile)
 	if err != nil {
@@ -64,6 +71,13 @@ func readnote(textfile string) {
 	}
 }
 
+func createRoomNode(name string, p, l, r room) {
+	var newRoom room
+	newRoom.parent = p
+	newRoom.leftChild = l
+	newRoom.rightSib = r
+}
+
 func main() {
 	readnote(os.Args[1])
 	fmt.Println("ant number:", slccontent[0])
@@ -76,4 +90,6 @@ func main() {
 	for m := connectionStartLine; m < len(RoomsandConnections); m++ {
 		fmt.Println("connections:", RoomsandConnections[m])
 	}
+
+	antFarmRooms := []room{}
 }
