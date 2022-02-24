@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -23,6 +24,11 @@ type room struct {
 	parent    *room
 	leftChild *room
 	rightSib  *room
+}
+
+type ant struct {
+	name     string
+	location *room
 }
 
 func readnote(textfile string) {
@@ -71,13 +77,14 @@ func readnote(textfile string) {
 	}
 }
 
-func createRoomNode(name string, p, l, r *room) {
+func createRoom(name string, p, l, r *room) {
 	newRoom := room{
 		name:      name,
 		parent:    p,
 		leftChild: l,
 		rightSib:  r,
 	}
+	fmt.Print(newRoom)
 }
 
 func main() {
@@ -94,4 +101,10 @@ func main() {
 	}
 
 	antFarmRooms := []room{}
+	// make rooms with createRoom
+	fmt.Print(antFarmRooms)
+
+	numOfAnt, _ := strconv.Atoi(slccontent[0])
+	ants := make([]ant, numOfAnt)
+	fmt.Print(len(ants))
 }
