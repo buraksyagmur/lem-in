@@ -18,15 +18,16 @@ var (
 )
 
 type room struct {
-	name      string
-	parent    *room
-	leftChild *room
-	rightSib  *room
+	name     string
+	parent   *room
+	children []room
+	occupied bool
 }
 
+// split ant to another file later
 type ant struct {
-	name     string
-	location *room
+	id      int
+	curRoom *room
 }
 
 func readnote(textfile string) {
@@ -75,12 +76,12 @@ func readnote(textfile string) {
 	}
 }
 
-func createRoom(name string, p, l, r *room) {
+func createOtherRoom(name string, p *room, children []room) {
 	newRoom := room{
-		name:      name,
-		parent:    p,
-		leftChild: l,
-		rightSib:  r,
+		name:     name,
+		parent:   p,
+		children: children,
+		occupied: false,
 	}
 	fmt.Print(newRoom)
 }
@@ -99,8 +100,38 @@ func main() {
 	}
 
 	antFarmRooms := []room{}
+
+	startingRoom := room{
+		name:   strings.Split(slccontent[startline+1], " ")[0],
+		parent: nil,
+		// children: startChildrenRm,
+		occupied: true,
+	}
+
+	startChildrenName := []string{}
+	for m := connectionStartLine; m < len(RoomsandConnections); m++ {
+		connections := strings.Split(RoomsandConnections[m], "-")
+		if connections[0] == startingRoom.name {
+			startChildrenName = append(startChildrenName, connections[1])
+		}
+	}
+	// fmt.Print(startChildrenName)
+
+	startChildrenRm := []room{}
+	for s := 0; s < len(startChildrenName); s++ {
+		startChildrenRm = append(startChildrenRm, room{
+			name:   startChildrenName[s],
+			parent: &startingRoom,
+			// children: ,
+			occupied: false,
+		})
+	}
+	// fmt.Print(startChildrenRm)
+	startingRoom.children = startChildrenRm
+
+	antFarmRooms = append(antFarmRooms, startingRoom)
 	// make rooms with createRoom
-	fmt.Print(antFarmRooms)
+	fmt.Println(antFarmRooms)
 
 	numOfAnt, _ := strconv.Atoi(slccontent[0])
 	ants := make([]ant, numOfAnt)
