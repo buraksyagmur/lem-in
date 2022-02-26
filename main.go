@@ -14,7 +14,7 @@ var (
 	endline             int
 	slccontent          []string
 	connectionStartLine int
-	RoomsandConnections []string
+	// RoomsandConnections []string
 )
 
 // split ant to another file later
@@ -23,7 +23,7 @@ type ant struct {
 	curRoom *room
 }
 
-func readnote(textfile string) {
+func readnote(textfile string) []string {
 	content, err := ioutil.ReadFile("examples/" + textfile)
 	if err != nil {
 		log.Fatal(err)
@@ -47,8 +47,10 @@ func readnote(textfile string) {
 			}
 		}
 	}
-	RoomsandConnections = strings.Split(string(content), "\n")
-	RoomsandConnections = append(RoomsandConnections[:endline], RoomsandConnections[endline+2:]...)
+	RoomsandConnections := strings.Split(string(content), "\n")
+	// RoomsandConnections = append(RoomsandConnections[3:endline], RoomsandConnections[endline+2:]...)
+	// including start and end room
+	RoomsandConnections = append(RoomsandConnections[2:endline], RoomsandConnections[endline+1:]...)
 
 	for l := 0; l < len(RoomsandConnections); l++ {
 		for t := 0; t < len(RoomsandConnections[l]); t++ {
@@ -67,32 +69,23 @@ func readnote(textfile string) {
 			}
 		}
 	}
-}
-
-func createOtherRoom(name string, p *room, children []room) {
-	newRoom := room{
-		name:     name,
-		parent:   p,
-		children: children,
-		occupied: false,
-	}
-	fmt.Print(newRoom)
+	return RoomsandConnections
 }
 
 func main() {
-	readnote(os.Args[1])
-	fmt.Println("ant number:", slccontent[0])
-	fmt.Println("startroom:", slccontent[startline+1])
-	for i := 3; i < connectionStartLine; i++ {
-		fmt.Println("other rooms:", RoomsandConnections[i])
-	}
-	fmt.Println("endline:", endline)
-	fmt.Println("endroom:", slccontent[endline+1])
-	for m := connectionStartLine; m < len(RoomsandConnections); m++ {
-		fmt.Println("connections:", RoomsandConnections[m])
-	}
+	roomsandConnections := readnote(os.Args[1])
+	// fmt.Println("ant number:", slccontent[0])
+	// fmt.Println("startroom:", slccontent[startline+1])
+	// for i := 1; i < connectionStartLine; i++ { // exclude the start room
+	// 	fmt.Println("other rooms:", RoomsandConnections[i])
+	// }
+	// fmt.Println("endline:", endline)
+	// fmt.Println("endroom:", slccontent[endline+1])
+	// for m := connectionStartLine; m < len(RoomsandConnections); m++ {
+	// 	fmt.Println("connections:", RoomsandConnections[m])
+	// }
 
-	Rooms()
+	Rooms(roomsandConnections)
 
 	numOfAnt, _ := strconv.Atoi(slccontent[0])
 	ants := make([]ant, numOfAnt)
