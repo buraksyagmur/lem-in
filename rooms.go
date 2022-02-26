@@ -46,11 +46,12 @@ func Rooms(roomsandConnections []string) {
 	}
 
 	startChildrenName := []string{}
-	for m := connectionStartLine; m < len(roomsandConnections); m++ {
-		connections := strings.Split(roomsandConnections[m], "-")
-		if connections[0] == startingRoom.name {
-			startChildrenName = append(startChildrenName, connections[1])
+	for c := 0; c < len(connections); c++ {
+		beginRm := strings.Split(connections[c], "-")
+		if beginRm[0] == startingRoom.name {
+			startChildrenName = append(startChildrenName, beginRm[0])
 		}
+
 	}
 	// fmt.Print(startChildrenName)
 
@@ -79,4 +80,13 @@ func createOtherRoom(name string, p *room, children []room) {
 		occupied: false,
 	}
 	fmt.Print(newRoom)
+}
+
+func findEndRoom(rmNames, connections []string) {
+	for i := 0; i < len(rmNames); i++ {
+		for c := 0; c < len(connections); c++ {
+			// if any rmNames[i] is not at any beginning of conn i.e. connections[0]
+			// then it is the end rm
+		}
+	}
 }
