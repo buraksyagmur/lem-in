@@ -15,10 +15,7 @@ type room struct {
 func Rooms(roomsandConnections []string) {
 	antFarmRooms := []room{}
 
-	// fmt.Println(slccontent)
 	// fmt.Println(roomsandConnections)
-	// fmt.Println(RoomsandConnections[0])
-	// fmt.Println(RoomsandConnections[len(RoomsandConnections)-1])
 	roomNames := []string{}
 	connections := []string{}
 	// start room name
@@ -35,7 +32,6 @@ func Rooms(roomsandConnections []string) {
 		}
 	}
 	fmt.Println(roomNames)
-	fmt.Println(nil)
 	fmt.Println(connections)
 
 	startingRoom := room{
@@ -69,7 +65,8 @@ func Rooms(roomsandConnections []string) {
 
 	antFarmRooms = append(antFarmRooms, startingRoom)
 	// make rooms with createRoom
-	fmt.Println(antFarmRooms)
+	fmt.Println("ant Room: ", antFarmRooms)
+	findEndRoom(roomNames, connections)
 }
 
 func createOtherRoom(name string, p *room, children []room) {
@@ -83,10 +80,18 @@ func createOtherRoom(name string, p *room, children []room) {
 }
 
 func findEndRoom(rmNames, connections []string) {
+	var endRmName string
 	for i := 0; i < len(rmNames); i++ {
 		for c := 0; c < len(connections); c++ {
 			// if any rmNames[i] is not at any beginning of conn i.e. connections[0]
 			// then it is the end rm
+			if rmNames[i] == connections[0] {
+				continue
+			} else {
+				endRmName = rmNames[i]
+			}
 		}
 	}
+	fmt.Println(endRmName)
+	// return endRmName
 }

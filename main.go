@@ -17,7 +17,6 @@ var (
 	// RoomsandConnections []string
 )
 
-// split ant to another file later
 type ant struct {
 	id      int
 	curRoom *room
