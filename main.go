@@ -84,8 +84,8 @@ func main() {
 	// 	fmt.Println("connections:", RoomsandConnections[m])
 	// }
 
-	Rooms(roomsandConnections)
-	// Rooms2(roomsandConnections)
+	// Rooms(roomsandConnections)
+	Rooms2(roomsandConnections)
 
 	numOfAnt, _ := strconv.Atoi(slccontent[0])
 	ants := make([]ant, numOfAnt)

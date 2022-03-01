@@ -34,10 +34,10 @@ func Rooms2(roomsandConnections []string) {
 	// fmt.Println(connections)
 
 }
-func addRoom2(root *room, rmName string, roomNames, connections []string) *room {
+func addRoom2(root *room, rmToAdd room, roomNames, connections []string) *room {
 	// end room / base case / final case
 	endRmName := findEndRoomName2(roomNames, connections)
-	if rmName == endRmName {
+	if rmToAdd.name == endRmName {
 		return &room{
 			// parent: , // set in other cases?
 			children: nil,
@@ -45,9 +45,14 @@ func addRoom2(root *room, rmName string, roomNames, connections []string) *room 
 			occupied: false,
 		}
 	}
+	// from top to bottom?
+	for r := 0; r < len(rmToAdd.children); r++ {
+		root.children[r] = addRoom2(root, rmToAdd.children[r], roomNames, connections)
+	}
+
 	// not start room
 	// if rmName != roomNames[0] {
-	// 	for r:=0; r<len(?); r++ {
+	// 	for r:=0; r<len(children); r++ {
 
 	// 	}
 	// }
