@@ -85,6 +85,7 @@ func main() {
 	// }
 
 	Rooms(roomsandConnections)
+	// Rooms2(roomsandConnections)
 
 	numOfAnt, _ := strconv.Atoi(slccontent[0])
 	ants := make([]ant, numOfAnt)
