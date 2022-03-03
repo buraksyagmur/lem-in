@@ -1,165 +1,153 @@
 package main
 
-// import (
-// 	"fmt"
-// 	"strings"
-// )
+import (
+	"fmt"
+	"strings"
+)
 
-// type room struct {
-// 	parent   *room
-// 	children [](*room)
-// 	name     string
-// 	occupied bool
-// }
+type room struct {
+	parent   *room
+	children [](*room)
+	name     string
+	occupied bool
+}
 
-// func Rooms(roomsandConnections []string) {
-// 	antFarmRooms := []room{}
+func Rooms(roomsandConnections []string) {
+	var antFarmRooms *room
 
-// 	// fmt.Println(roomsandConnections)
-// 	roomNames := []string{}
-// 	connections := []string{}
+	// fmt.Println(roomsandConnections)
+	roomNames := []string{}
+	connections := []string{}
+	beginConnRmNames := []string{}
+	destConnRmNames := []string{}
 
-// 	for i := 0; i < len(roomsandConnections); i++ {
-// 		for j := 0; j < len(roomsandConnections[i]); j++ {
-// 			if roomsandConnections[i][j] == ' ' {
-// 				roomName := strings.Split(roomsandConnections[i], " ")[0]
-// 				roomNames = append(roomNames, roomName)
-// 				break // coz there are 2 spaces
-// 			} else if roomsandConnections[i][j] == '-' {
-// 				connections = append(connections, roomsandConnections[i])
-// 			}
-// 		}
-// 	}
-// 	// fmt.Println(roomNames)
-// 	// fmt.Println(connections)
+	for i := 0; i < len(roomsandConnections); i++ {
+		for j := 0; j < len(roomsandConnections[i]); j++ {
+			if roomsandConnections[i][j] == ' ' {
+				roomName := strings.Split(roomsandConnections[i], " ")[0]
+				roomNames = append(roomNames, roomName)
+				break // coz there are 2 spaces
+			} else if roomsandConnections[i][j] == '-' {
+				connections = append(connections, roomsandConnections[i])
+				beginEndSlice := strings.Split(roomsandConnections[i], "-")
+				beginConnRmNames = append(beginConnRmNames, beginEndSlice[0])
+				destConnRmNames = append(destConnRmNames, beginEndSlice[1])
+			}
+		}
+	}
+	// fmt.Println(roomNames)
+	fmt.Println(connections)
+	fmt.Println(beginConnRmNames)
+	fmt.Println(destConnRmNames)
 
-// 	// start Room special case
-// 	startingRoom := room{
-// 		name:   roomNames[0],
-// 		parent: nil,
-// 		// children: startChildrenRm,
-// 		occupied: true,
-// 	}
+	startRmName := roomNames[0]
+	endRmName := findEndRoomName(roomNames, connections)
 
-// 	startChildrenName := []string{}
-// 	// startGrandChildrenName := []string{}
-// 	for c := 0; c < len(connections); c++ {
-// 		connectionsRms := strings.Split(connections[c], "-")
-// 		beginRm := connectionsRms[0]
-// 		// destinationRm := connectionsRms[1] // have to match the right begin Room name
-// 		if beginRm == startingRoom.name {
-// 			startChildrenName = append(startChildrenName, beginRm)
-// 			// startGrandChildrenName = append(startGrandChildrenName, destinationRm)
-// 		}
-// 	}
+	// test cases
+	// first name in roomNames must be the start room
+	for r := 0; r < len(roomNames); r++ {
+		antFarmRooms = addRoom(antFarmRooms, roomNames[r], startRmName, endRmName, beginConnRmNames, destConnRmNames)
+	}
 
-// 	startChildrenRm := []*room{}
-// 	for s := 0; s < len(startChildrenName); s++ {
-// 		startChildrenRm = append(startChildrenRm, &room{
-// 			parent: &startingRoom,
-// 			// children: ,
-// 			name:     startChildrenName[s],
-// 			occupied: false,
-// 		})
-// 	}
+	// antFarmRooms = addRoom(antFarmRooms, roomNames[len(connections)-1], true, startRmName, endRmName)
 
-// 	startingRoom.children = startChildrenRm
+	// loop?
+	// antFarmRooms = addRoom(antFarmRooms, childrenName, endConnRmNames[0], true, roomNames[0], endRmName)
 
-// 	antFarmRooms = append(antFarmRooms, startingRoom)
-// 	// antFarmRooms = append(antFarmRooms, startChildrenRooms)
+	// fmt.Println(antFarmRooms)
+	fmt.Println("----------------")
+	printRoom(antFarmRooms)
+}
+func addRoom(root *room, rmToAddName string, startRmName, endRmName string, beginConnRmNames, destConnRmNames []string) *room {
+	var roomToAdd room
+	// end room / base case / final case
+	if rmToAddName == endRmName {
+		fmt.Printf("constructing end room %s\n", rmToAddName)
+		return &room{
+			// parent: ,
+			children: nil,
+			name:     rmToAddName,
+			occupied: false,
+		}
+	} else if rmToAddName == startRmName { // start Room special case
+		fmt.Printf("constructing start room %s\n", rmToAddName)
+		roomToAdd = room{
+			parent: nil,
+			// children: startChildrenRm,
+			name:     rmToAddName,
+			occupied: true,
+		}
+	} else {
+		fmt.Printf("constructing other room %s\n", rmToAddName)
+		roomToAdd = room{
+			// parent: nil,
+			// children: startChildrenRm,
+			name:     rmToAddName,
+			occupied: false,
+		}
+	}
 
-// 	// test addRoom func endRoom case
-// 	// antFarmRooms = append(antFarmRooms, *addRoom(&room{
-// 	// 	name: "peter",
-// 	// }, roomNames, connections))
+	childrenName := []string{}
+	for c := 0; c < len(beginConnRmNames); c++ {
+		beginRmName := beginConnRmNames[c]
+		// destinationRm := connectionsRms[1] // have to match the right begin Room name
+		if beginRmName == rmToAddName {
+			destRmName := destConnRmNames[c]
+			fmt.Printf("Adding the %dth child (%s) to %s\n", c, destRmName, rmToAddName)
+			childrenName = append(childrenName, destRmName)
+			// startGrandChildrenName = append(startGrandChildrenName, destinationRm)
+		}
+	}
+	// turn childrenName into childrenRoom and add it to the roomToAdd children field
+	childrenRm := []*room{}
+	for s := 0; s < len(childrenName); s++ {
+		childrenRm = append(childrenRm, &room{
+			parent: &roomToAdd,
+			// children: ,
+			name:     childrenName[s],
+			occupied: false,
+		})
+	}
 
-// 	// antFarmRooms = append(antFarmRooms, *addRoom(&room{
-// 	// 	name: "peter",
-// 	// }, roomNames, connections))
+	// 	startingRoom.children = startChildrenRm
 
-// 	findEndRoomName(roomNames, connections)
-// 	fmt.Println("ant Room: ", antFarmRooms)
-// }
+	// from top to bottom?
+	// childrenSlice := make([]room, 10)
+	// for r := 0; r < len(rmToAdd.children); r++ {
+	// 	root.children[r] = addRoom(root, rmToAdd.children[r], roomNames, connections)
+	// }
 
-// // func createOtherRoom(name string, p *room, children []room) {
-// // 	newRoom := room{
-// // 		name:     name,
-// // 		parent:   p,
-// // 		children: children,
-// // 		occupied: false,
-// // 	}
-// // 	fmt.Print(newRoom)
-// // }
+	return root
+}
 
-// // func findChildren(connections []string, cur *room) []*room {
-// // 	childrenName := []string{}
-// // 	for c := 0; c < len(connections); c++ {
-// // 		beginRm := strings.Split(connections[c], "-")[0]
-// // 		if beginRm == (*cur).name {
-// // 			childrenName = append(childrenName, beginRm)
-// // 		}
+func findEndRoomName(rmNames, connections []string) string {
+	var endRmName string
+	for i := 0; i < len(rmNames); i++ {
+		for c := 0; c < len(connections); c++ {
+			// if any rmNames[i] is not at any beginning of conn i.e. connections[0]
+			// then it is the end rm
+			if rmNames[i] == connections[0] {
+				continue
+			} else {
+				endRmName = rmNames[i]
+			}
+		}
+	}
+	fmt.Println(endRmName)
+	return endRmName
+}
 
-// // 	}
-// // 	fmt.Print(childrenName)
+func printRoom(root *room) {
+	fmt.Println("-------Ant--Farm--Rooms--------")
+	if root == nil {
+		fmt.Println("No rooms")
+		return
+	}
+	// fmt.Println(root.name)
+	i := 0
+	for root.children != nil {
+		printRoom(root.children[i])
+		i++
+	}
 
-// // 	childrenRm := []*room{}
-// // 	for s := 0; s < len(childrenName); s++ {
-// // 		childrenRm = append(childrenRm, &room{
-// // 			name:   childrenName[s],
-// // 			parent: cur,
-// // 			// children: ,
-// // 			occupied: false,
-// // 		})
-// // 	}
-// // 	fmt.Print(childrenRm)
-// // 	(*cur).children = childrenRm
-// // }
-
-// // roomNames should be replaced by a slice that is ordered by connections
-// func addRoom(root *room, rmName string, roomNames, connections []string) *room {
-// 	// end room / base case / final case
-// 	endRmName := findEndRoomName(roomNames, connections)
-// 	if rmName == endRmName {
-// 		return &room{
-// 			// parent: , // set in other cases?
-// 			children: nil,
-// 			name:     endRmName,
-// 			occupied: false,
-// 		}
-// 	}
-// 	// not start room
-// 	// if rmName != roomNames[0] {
-// 	// 	for r:=0; r<len(?); r++ {
-
-// 	// 	}
-// 	// }
-// 	return root
-
-// 	// start room/
-// 	// if root == nil {
-// 	// 	return &room{
-// 	// 		parent: nil,
-// 	// 		// children: findChildren(connections),// deal with children in below cases, by refering p
-// 	// 		name:     rmName, // subject to change if there is another slice following the order of rooms
-// 	// 		occupied: true,
-// 	// 	}
-
-// 	// }
-// }
-
-// func findEndRoomName(rmNames, connections []string) string {
-// 	var endRmName string
-// 	for i := 0; i < len(rmNames); i++ {
-// 		for c := 0; c < len(connections); c++ {
-// 			// if any rmNames[i] is not at any beginning of conn i.e. connections[0]
-// 			// then it is the end rm
-// 			if rmNames[i] == connections[0] {
-// 				continue
-// 			} else {
-// 				endRmName = rmNames[i]
-// 			}
-// 		}
-// 	}
-// 	fmt.Println(endRmName)
-// 	return endRmName
-// }
+}
