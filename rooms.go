@@ -36,9 +36,9 @@ func Rooms(roomsandConnections []string) {
 		}
 	}
 	// fmt.Println(roomNames)
-	fmt.Println(connections)
-	fmt.Println(beginConnRmNames)
-	fmt.Println(destConnRmNames)
+	// fmt.Println(connections)
+	// fmt.Println(beginConnRmNames)
+	// fmt.Println(destConnRmNames)
 
 	startRmName := roomNames[0]
 	endRmName := findEndRoomName(roomNames, connections)
@@ -62,7 +62,8 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 	var roomToAdd room
 	// end room / base case / final case
 	if rmToAddName == endRmName {
-		fmt.Printf("constructing end room %s\n", rmToAddName)
+		fmt.Println("___________________________________________________")
+		fmt.Printf("constructing end room %s...\n", rmToAddName)
 		return &room{
 			// parent: ,
 			children: nil,
@@ -70,7 +71,8 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 			occupied: false,
 		}
 	} else if rmToAddName == startRmName { // start Room special case
-		fmt.Printf("constructing start room %s\n", rmToAddName)
+		fmt.Println("___________________________________________________")
+		fmt.Printf("constructing start room %s...\n", rmToAddName)
 		roomToAdd = room{
 			parent: nil,
 			// children: startChildrenRm,
@@ -78,7 +80,8 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 			occupied: true,
 		}
 	} else {
-		fmt.Printf("constructing other room %s\n", rmToAddName)
+		fmt.Println("___________________________________________________")
+		fmt.Printf("constructing other room %s...\n", rmToAddName)
 		roomToAdd = room{
 			// parent: nil,
 			// children: startChildrenRm,
@@ -133,7 +136,7 @@ func findEndRoomName(rmNames, connections []string) string {
 			}
 		}
 	}
-	fmt.Println(endRmName)
+	// fmt.Println(endRmName)
 	return endRmName
 }
 
@@ -149,5 +152,4 @@ func printRoom(root *room) {
 		printRoom(root.children[i])
 		i++
 	}
-
 }
