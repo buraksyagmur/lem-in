@@ -27,11 +27,6 @@ func Rooms(roomsandConnections []string) {
 				roomName := strings.Split(roomsandConnections[i], " ")[0]
 				roomNames = append(roomNames, roomName)
 				break // coz there are 2 spaces
-			} else if roomsandConnections[i][j] == '-' {
-				connections = append(connections, roomsandConnections[i])
-				beginEndSlice := strings.Split(roomsandConnections[i], "-")
-				beginConnRmNames = append(beginConnRmNames, beginEndSlice[0])
-				destConnRmNames = append(destConnRmNames, beginEndSlice[1])
 			}
 		}
 	}
@@ -41,8 +36,22 @@ func Rooms(roomsandConnections []string) {
 	// fmt.Println(destConnRmNames)
 
 	startRmName := roomNames[0]
-	endRmName := findEndRoomName(roomNames, connections)
+	endRmName := roomNames[len(roomNames)-1]
 
+	for i := 0; i < len(roomsandConnections); i++ {
+		for j := 0; j < len(roomsandConnections[i]); j++ {
+			if roomsandConnections[i][j] == '-' {
+				connections = append(connections, roomsandConnections[i])
+				beginEndSlice := strings.Split(roomsandConnections[i], "-")
+				if beginEndSlice[0] == endRmName {
+					beginConnRmNames = append(beginConnRmNames, beginEndSlice[1])
+					destConnRmNames = append(destConnRmNames, beginEndSlice[0])
+				}
+				beginConnRmNames = append(beginConnRmNames, beginEndSlice[0])
+				destConnRmNames = append(destConnRmNames, beginEndSlice[1])
+			}
+		}
+	}
 	// fmt.Println(addRoom(antFarmRooms, startRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames))
 	antFarmRooms = addRoom(antFarmRooms, startRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 
@@ -122,22 +131,22 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 	return roomToAdd
 }
 
-func findEndRoomName(rmNames, connections []string) string {
-	var endRmName string
-	for i := 0; i < len(rmNames); i++ {
-		for c := 0; c < len(connections); c++ {
-			// if any rmNames[i] is not at any beginning of conn i.e. connections[0]
-			// then it is the end rm
-			if rmNames[i] == connections[0] {
-				continue
-			} else {
-				endRmName = rmNames[i]
-			}
-		}
-	}
-	// fmt.Println(endRmName)
-	return endRmName
-}
+// func findEndRoomName(rmNames, connections []string) string {
+// 	var endRmName string
+// 	for i := 0; i < len(rmNames); i++ {
+// 		for c := 0; c < len(connections); c++ {
+// 			// if any rmNames[i] is not at any beginning of conn i.e. connections[0]
+// 			// then it is the end rm
+// 			if rmNames[i] == connections[0] {
+// 				continue
+// 			} else {
+// 				endRmName = rmNames[i]
+// 			}
+// 		}
+// 	}
+// 	// fmt.Println(endRmName)
+// 	return endRmName
+// }
 
 func printRoom(root *room) {
 	fmt.Println("-------Ant--Farm--Rooms--------")
