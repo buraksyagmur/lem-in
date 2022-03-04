@@ -43,6 +43,7 @@ func Rooms(roomsandConnections []string) {
 	startRmName := roomNames[0]
 	endRmName := findEndRoomName(roomNames, connections)
 
+	// fmt.Println(addRoom(antFarmRooms, startRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames))
 	antFarmRooms = addRoom(antFarmRooms, startRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 
 	// test cases
@@ -56,43 +57,12 @@ func Rooms(roomsandConnections []string) {
 	// loop?
 	// antFarmRooms = addRoom(antFarmRooms, childrenName, endConnRmNames[0], true, roomNames[0], endRmName)
 
-	fmt.Println("----------------")
-	fmt.Println(antFarmRooms)
-	fmt.Println("----------------")
+	// fmt.Println("----------------")
+	// fmt.Println(antFarmRooms)
+	// fmt.Println("----------------")
 	printRoom(antFarmRooms)
 }
-func addRoom(root *room, rmToAddName string, startRmName, endRmName string, beginConnRmNames, destConnRmNames []string) *room {
-	var roomToAdd *room
-	// end room / base case / final case
-	if rmToAddName == endRmName {
-		fmt.Println("___________________________________________________")
-		fmt.Printf("constructing end room %s...\n", rmToAddName)
-		return &room{
-			// parent: ,
-			children: nil,
-			name:     rmToAddName,
-			occupied: false,
-		}
-	} else if rmToAddName == startRmName { // start Room special case
-		fmt.Println("___________________________________________________")
-		fmt.Printf("constructing start room %s...\n", rmToAddName)
-		roomToAdd = &room{
-			parent: nil,
-			// children: startChildrenRm,
-			name:     rmToAddName,
-			occupied: true,
-		}
-	} else {
-		fmt.Println("___________________________________________________")
-		fmt.Printf("constructing other room %s...\n", rmToAddName)
-		roomToAdd = &room{
-			// parent: nil,
-			// children: startChildrenRm,
-			name:     rmToAddName,
-			occupied: false,
-		}
-	}
-
+func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName string, beginConnRmNames, destConnRmNames []string) {
 	childrenRm := []*room{}
 	for c := 0; c < len(beginConnRmNames); c++ {
 		beginRmName := beginConnRmNames[c]
@@ -108,7 +78,48 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 			addRoom(roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		}
 	}
-	return root
+}
+
+func addRoom(root *room, rmToAddName string, startRmName, endRmName string, beginConnRmNames, destConnRmNames []string) *room {
+	var roomToAdd *room
+	// end room / base case / final case
+	if rmToAddName == endRmName {
+		fmt.Println("___________________________________________________")
+
+		fmt.Printf("constructing end room %s...\n", rmToAddName)
+		return &room{
+			parent:   root,
+			children: nil,
+			name:     rmToAddName,
+			occupied: false,
+		}
+	} else if rmToAddName == startRmName { // start Room special case
+		fmt.Println("___________________________________________________")
+		fmt.Printf("constructing start room %s...\n", rmToAddName)
+		roomToAdd = &room{
+			parent: nil,
+			// children: startChildrenRm,
+			name:     rmToAddName,
+			occupied: true,
+		}
+		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
+		// fmt.Println(roomToAdd)
+	} else {
+		fmt.Println("___________________________________________________")
+		fmt.Printf("constructing other room %s...\n", rmToAddName)
+		roomToAdd = &room{
+			parent: root,
+			// children: startChildrenRm,
+			name:     rmToAddName,
+			occupied: false,
+		}
+		roomToAdd.parent.children = append(roomToAdd.parent.children, roomToAdd)
+		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
+		// fmt.Println(roomToAdd)
+	}
+
+	// fmt.Println(roomToAdd)
+	return roomToAdd
 }
 
 func findEndRoomName(rmNames, connections []string) string {
@@ -131,13 +142,16 @@ func findEndRoomName(rmNames, connections []string) string {
 func printRoom(root *room) {
 	fmt.Println("-------Ant--Farm--Rooms--------")
 	if root == nil {
-		fmt.Println("No rooms")
+		// fmt.Println("No rooms")
 		return
 	}
-	// fmt.Println(root.name)
-	i := 0
-	for root.children != nil {
+	fmt.Println(root.name)
+	for i := 0; i < len(root.children); i++ {
 		printRoom(root.children[i])
-		i++
 	}
+	// i := 0
+	// for root.children != nil {
+	// 	printRoom(root.children[i])
+	// 	i++
+	// }
 }
