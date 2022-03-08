@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -82,9 +84,12 @@ func main() {
 	// 	fmt.Println("connections:", RoomsandConnections[m])
 	// }
 
-	Rooms(roomsandConnections)
+	// constructing rooms
+	antFarmRooms := Rooms(roomsandConnections)
+	fmt.Println(antFarmRooms)
 
-	// numOfAnt, _ := strconv.Atoi(slccontent[0])
-	// ants := make([]ant, numOfAnt)
-	// fmt.Print(len(ants))
+	// ants
+	numOfAnt, _ := strconv.Atoi(slccontent[0])
+	ants := make([]ant, numOfAnt)
+	fmt.Println("no. of ants: ", len(ants))
 }
