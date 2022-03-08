@@ -14,10 +14,10 @@ var (
 	endline             int
 	slccontent          []string
 	connectionStartLine int
-	RoomsandConnections []string
-	numOfAnt            int
-	nameofStart         string
-	nameofEnd           string
+	// RoomsandConnections []string
+	numOfAnt    int
+	nameofStart string
+	nameofEnd   string
 )
 
 func readnote(textfile string) []string {
@@ -44,11 +44,11 @@ func readnote(textfile string) []string {
 			}
 		}
 	}
-	RoomsandConnections = strings.Split(string(content), "\n")
+	RoomsandConnections := strings.Split(string(content), "\n")
 	// RoomsandConnections = append(RoomsandConnections[3:endline], RoomsandConnections[endline+2:]...)
 	// including start and end room
 	RoomsandConnections = append(RoomsandConnections[2:endline], RoomsandConnections[endline+1:]...)
-	fmt.Println(RoomsandConnections)
+	// fmt.Println(RoomsandConnections)
 	for l := 0; l < len(RoomsandConnections); l++ {
 		for t := 0; t < len(RoomsandConnections[l]); t++ {
 			if string(RoomsandConnections[l][0]) == "#" {
