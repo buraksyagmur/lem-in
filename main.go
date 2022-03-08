@@ -15,6 +15,7 @@ var (
 	slccontent          []string
 	connectionStartLine int
 	// RoomsandConnections []string
+	numOfAnt int
 )
 
 type ant struct {
@@ -73,6 +74,7 @@ func readnote(textfile string) []string {
 
 func main() {
 	roomsandConnections := readnote(os.Args[1])
+	numOfAnt, _ = strconv.Atoi(slccontent[0])
 	// fmt.Println("ant number:", slccontent[0])
 	// fmt.Println("startroom:", slccontent[startline+1])
 	// for i := 1; i < connectionStartLine; i++ { // exclude the start room
@@ -86,10 +88,9 @@ func main() {
 
 	// constructing rooms
 	antFarmRooms := Rooms(roomsandConnections)
-	fmt.Println(antFarmRooms)
-
+	fmt.Println("antFarmRooms", antFarmRooms)
+	CreatingAnts()
 	// ants
-	numOfAnt, _ := strconv.Atoi(slccontent[0])
-	ants := make([]ant, numOfAnt)
-	fmt.Println("no. of ants: ", len(ants))
+	// ants := make([]ant, numOfAnt)
+	// fmt.Println("no. of ants: ", len(ants))
 }

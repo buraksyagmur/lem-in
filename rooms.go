@@ -12,6 +12,11 @@ type room struct {
 	occupied bool
 }
 
+var (
+	firstRm *room
+	lastRm  *room
+)
+
 func Rooms(roomsandConnections []string) *room {
 	var antFarmRooms *room
 
@@ -49,6 +54,7 @@ func Rooms(roomsandConnections []string) *room {
 	antFarmRooms = addRoom(antFarmRooms, startRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 	return antFarmRooms
 }
+
 func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName string, beginConnRmNames, destConnRmNames []string) {
 	childrenRm := []*room{}
 	for c := 0; c < len(beginConnRmNames); c++ {
@@ -73,12 +79,13 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		fmt.Printf("constructing end room %s...\n", rmToAddName)
 		fmt.Println("")
 		fmt.Println("")
-		return &room{
+		lastRm = &room{
 			parent:   root,
 			children: nil,
 			name:     rmToAddName,
 			occupied: false,
 		}
+		return lastRm
 	} else if rmToAddName == startRmName { // start Room special case
 		fmt.Println("___________________________________________________")
 		fmt.Printf("constructing start room %s...\n", rmToAddName)
@@ -88,6 +95,7 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 			occupied: true,
 		}
 		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
+		firstRm = roomToAdd
 	} else {
 		fmt.Println("___________________________________________________")
 		fmt.Printf("constructing other room %s...\n", rmToAddName)
@@ -99,6 +107,9 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		roomToAdd.parent.children = append(roomToAdd.parent.children, roomToAdd)
 		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 	}
+	// fmt.Println("lastrm", lastRm)
+	// fmt.Println("firstrm", firstRm)
+	// fmt.Println(roomToAdd)
 	return roomToAdd
 }
 
