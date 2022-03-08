@@ -29,6 +29,7 @@ func (a *ant) move(out, in *room) {
 	if !in.occupied {
 		out.occupied = false
 		in.occupied = true
+		a.curRoom = in
 	}
 }
 
@@ -36,6 +37,7 @@ func (a *ant) move(out, in *room) {
 func (a *ant) startMove(in *room) {
 	if !in.occupied {
 		in.occupied = true
+		a.curRoom = in
 	}
 }
 
