@@ -34,8 +34,8 @@ func Rooms(roomsandConnections []string) *room {
 			}
 		}
 	}
-	startRmName := roomNames[0]
-	endRmName := roomNames[len(roomNames)-1]
+	startRmName := nameofStart
+	endRmName := nameofEnd
 
 	for i := 0; i < len(roomsandConnections); i++ {
 		for j := 0; j < len(roomsandConnections[i]); j++ {

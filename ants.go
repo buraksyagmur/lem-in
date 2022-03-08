@@ -42,7 +42,9 @@ func (a *ant) startMove(in *room) {
 }
 
 func (a *ant) checkState(rm *room) {
-	if rm != endRoom {
-
+	if rm != lastRm {
 	}
+}
+func bestPath(){
+
 }
