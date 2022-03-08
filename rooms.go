@@ -102,6 +102,22 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 	return roomToAdd
 }
 
+// func findEndRoomName(rmNames, connections []string) string {
+//     var endRmName string
+//     for i := 0; i < len(rmNames); i++ {
+//         for c := 0; c < len(connections); c++ {
+//             // if any rmNames[i] is not at any beginning of conn i.e. connections[0]
+//             // then it is the end rm
+//             if rmNames[i] == connections[0] {
+//                 continue
+//             } else {
+//                 endRmName = rmNames[i]
+//             }
+//         }
+//     }
+//     // fmt.Println(endRmName)
+//     return endRmName
+// }
 // func printRoom(root *room) { // not working yet, but not required
 // 	fmt.Println("-------Ant--Farm--Rooms--------")
 // 	if root == nil {
