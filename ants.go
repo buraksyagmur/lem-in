@@ -45,6 +45,3 @@ func (a *ant) checkState(rm *room) {
 	if rm != lastRm {
 	}
 }
-func bestPath(){
-
-}
