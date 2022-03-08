@@ -18,11 +18,6 @@ var (
 	numOfAnt int
 )
 
-type ant struct {
-	id      int
-	curRoom *room
-}
-
 func readnote(textfile string) []string {
 	content, err := ioutil.ReadFile("examples/" + textfile)
 	if err != nil {

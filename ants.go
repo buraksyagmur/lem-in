@@ -2,6 +2,11 @@ package main
 
 import "fmt"
 
+type ant struct {
+	id      int
+	curRoom *room
+}
+
 var ants []ant
 
 func CreatingAnts() []ant {
@@ -17,4 +22,25 @@ func CreatingAnts() []ant {
 	}
 	fmt.Println("ants", ants)
 	return ants
+}
+
+// have to consider the first ant in to the end room
+func (a *ant) move(out, in *room) {
+	if !in.occupied {
+		out.occupied = false
+		in.occupied = true
+	}
+}
+
+// have to consider the last ant out
+func (a *ant) startMove(in *room) {
+	if !in.occupied {
+		in.occupied = true
+	}
+}
+
+func (a *ant) checkState(rm *room) {
+	if rm != endRoom {
+
+	}
 }
