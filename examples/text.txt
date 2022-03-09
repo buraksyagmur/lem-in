@@ -1,0 +1,10 @@
+4
+##start
+startroom 0 3
+secondroom 2 5
+thirdroom 4 0
+##end
+endroom 8 3
+startroom-secondroom
+secondroom-thirdroom
+thirdroom-endroom

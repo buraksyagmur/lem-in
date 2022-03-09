@@ -92,7 +92,13 @@ func main() {
 	// constructing rooms
 	antFarmRooms := Rooms(roomsandConnections)
 	fmt.Println("antFarmRooms", antFarmRooms)
-	CreatingAnts()
+	// fmt.Println(lastRm, "lastroom")
+	fmt.Println("Farm1", *Farm[0])
+	// fmt.Println("Farm2", *Farm[1])
+	// fmt.Println("Farm3", *Farm[2])
+	// fmt.Println("Farm1", Farm)
+	antfarm := CreatingAnts()
+	walk(antfarm)
 	// ants
 	// ants := make([]ant, numOfAnt)
 	// fmt.Println("no. of ants: ", len(ants))

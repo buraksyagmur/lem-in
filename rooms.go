@@ -15,6 +15,7 @@ type room struct {
 var (
 	firstRm *room
 	lastRm  *room
+	Farm    []*room
 )
 
 func Rooms(roomsandConnections []string) *room {
@@ -30,6 +31,7 @@ func Rooms(roomsandConnections []string) *room {
 			if roomsandConnections[i][j] == ' ' {
 				roomName := strings.Split(roomsandConnections[i], " ")[0]
 				roomNames = append(roomNames, roomName)
+
 				break // coz there are 2 spaces
 			}
 		}
@@ -41,6 +43,7 @@ func Rooms(roomsandConnections []string) *room {
 		for j := 0; j < len(roomsandConnections[i]); j++ {
 			if roomsandConnections[i][j] == '-' {
 				connections = append(connections, roomsandConnections[i])
+
 				beginDestSlice := strings.Split(roomsandConnections[i], "-")
 				if beginDestSlice[0] == endRmName {
 					beginConnRmNames = append(beginConnRmNames, beginDestSlice[1])
@@ -51,6 +54,7 @@ func Rooms(roomsandConnections []string) *room {
 			}
 		}
 	}
+	fmt.Println("roomname", destConnRmNames)
 	antFarmRooms = addRoom(antFarmRooms, startRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 	return antFarmRooms
 }
@@ -107,9 +111,10 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		roomToAdd.parent.children = append(roomToAdd.parent.children, roomToAdd)
 		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 	}
+	Farm = append(Farm, roomToAdd)
 	// fmt.Println("lastrm", lastRm)
 	// fmt.Println("firstrm", firstRm)
-	// fmt.Println(roomToAdd)
+	
 	return roomToAdd
 }
 

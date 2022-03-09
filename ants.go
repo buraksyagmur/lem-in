@@ -20,7 +20,7 @@ func CreatingAnts() []ant {
 			ants = append(ants, allants)
 		}
 	}
-	fmt.Println("ants", ants)
+	// fmt.Println("ants", ants)
 	return ants
 }
 
@@ -43,5 +43,29 @@ func (a *ant) startMove(in *room) {
 
 func (a *ant) checkState(rm *room) {
 	if rm != lastRm {
+	}
+}
+
+func walk(antfarm []ant) {
+	var allpassed bool = true
+	for i := 0; i < len(antfarm)-1; i++ {
+
+		// if !antfarm[i].curRoom.children[0].occupied {
+		// 	continue
+		// }
+
+		// antfarm[i].curRoom.occupied = false
+		antfarm[i].curRoom = antfarm[i].curRoom.children[0]
+		antfarm[i].curRoom.occupied = true
+		allpassed = false
+
+		fmt.Print("L", antfarm[i].id, "-", antfarm[i].curRoom.name, " ")
+
+	}
+	if allpassed {
+		return
+	} else {
+		fmt.Println(" ")
+		walk(antfarm)
 	}
 }
