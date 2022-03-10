@@ -64,6 +64,7 @@ func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName st
 	for c := 0; c < len(beginConnRmNames); c++ {
 		beginRmName := beginConnRmNames[c]
 		if beginRmName == rmToAddName {
+			fmt.Println("dsf", childrenRm)
 			destRmName := destConnRmNames[c]
 			fmt.Printf("Adding new child room (%s) from the %dth connection to %s\n", destRmName, c, rmToAddName)
 			childrenRm = append(childrenRm, &room{
@@ -71,6 +72,8 @@ func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName st
 				name:     destRmName,
 				occupied: false,
 			})
+			fmt.Println("2nd", childrenRm)
+			fmt.Println("children", roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 			addRoom(roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		}
 	}
@@ -89,6 +92,8 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 			name:     rmToAddName,
 			occupied: false,
 		}
+		lastRm.parent.children = append(lastRm.parent.children, lastRm)
+		fmt.Println("endrm", *lastRm)
 		return lastRm
 	} else if rmToAddName == startRmName { // start Room special case
 		fmt.Println("___________________________________________________")
@@ -100,6 +105,8 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		}
 		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		firstRm = roomToAdd
+		fmt.Println("firstroom", *firstRm)
+
 	} else {
 		fmt.Println("___________________________________________________")
 		fmt.Printf("constructing other room %s...\n", rmToAddName)
@@ -109,12 +116,12 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 			occupied: false,
 		}
 		roomToAdd.parent.children = append(roomToAdd.parent.children, roomToAdd)
+		fmt.Println("vars", roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
+		fmt.Println("roomtoadd", *roomToAdd)
 	}
 	Farm = append(Farm, roomToAdd)
-	// fmt.Println("lastrm", lastRm)
 	// fmt.Println("firstrm", firstRm)
-	
 	return roomToAdd
 }
 

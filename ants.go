@@ -48,15 +48,20 @@ func (a *ant) checkState(rm *room) {
 
 func walk(antfarm []ant) {
 	var allpassed bool = true
-	for i := 0; i < len(antfarm)-1; i++ {
+	for i := 0; i < len(antfarm); i++ {
 
-		// if !antfarm[i].curRoom.children[0].occupied {
-		// 	continue
-		// }
+		if antfarm[i].curRoom.name == lastRm.name {
+			continue
+		}
+		if antfarm[i].curRoom.children[0].occupied {
+			continue
+		}
 
-		// antfarm[i].curRoom.occupied = false
+		antfarm[i].curRoom.occupied = false
 		antfarm[i].curRoom = antfarm[i].curRoom.children[0]
-		antfarm[i].curRoom.occupied = true
+		if antfarm[i].curRoom.name != lastRm.name {
+			antfarm[i].curRoom.occupied = true
+		}
 		allpassed = false
 
 		fmt.Print("L", antfarm[i].id, "-", antfarm[i].curRoom.name, " ")
