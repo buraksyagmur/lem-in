@@ -7,7 +7,10 @@ type ant struct {
 	curRoom *room
 }
 
-var ants []ant
+var (
+	ants        []ant
+	roomspassed int
+)
 
 func CreatingAnts() []ant {
 	if firstRm != nil {
@@ -72,5 +75,22 @@ func walk(antfarm []ant) {
 	} else {
 		fmt.Println(" ")
 		walk(antfarm)
+	}
+}
+
+func ShortestPath(rm *room) {
+	// fmt.Println("roomname", rm)
+	// fmt.Println("childname", rm.children[0].name)
+	// fmt.Println("endroomname", lastRm.name)
+
+	if rm.name != lastRm.name {
+		roomspassed++
+		for i := 0; i < len(rm.children); i++ {
+			fmt.Println(i)
+			ShortestPath(rm.children[i])
+		}
+	} else {
+		fmt.Println(roomspassed)
+		fmt.Println(rm.name)
 	}
 }

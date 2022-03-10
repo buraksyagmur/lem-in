@@ -98,6 +98,11 @@ func main() {
 	fmt.Println("Farm3", *Farm[2])
 	fmt.Println("Farm", Farm)
 	fmt.Println("Farm1", Farm)
+	// for i:= 0 ; i < len(Farm) ; i++ {
+	// ShortestPath(Farm[i])
+	// }
+	ShortestPath(Farm[numOfAnt])
+
 	antfarm := CreatingAnts()
 	walk(antfarm)
 	// ants
