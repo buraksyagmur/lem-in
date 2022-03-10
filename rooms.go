@@ -67,6 +67,7 @@ func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName st
 			fmt.Println("dsf", childrenRm)
 			destRmName := destConnRmNames[c]
 			fmt.Printf("Adding new child room (%s) from the %dth connection to %s\n", destRmName, c, rmToAddName)
+			fmt.Println(childrenRm)
 			childrenRm = append(childrenRm, &room{
 				parent:   roomToAdd,
 				name:     destRmName,
@@ -74,6 +75,7 @@ func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName st
 			})
 			fmt.Println("2nd", childrenRm)
 			fmt.Println("children", roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
+			fmt.Println(childrenRm)
 			addRoom(roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		}
 	}
@@ -122,6 +124,7 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 	}
 	Farm = append(Farm, roomToAdd)
 	// fmt.Println("firstrm", firstRm)
+
 	return roomToAdd
 }
 
