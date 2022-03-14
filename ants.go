@@ -24,6 +24,7 @@ func CreatingAnts() []ant {
 		}
 	}
 	// fmt.Println("ants", ants)
+
 	return ants
 }
 
@@ -93,4 +94,25 @@ func ShortestPath(rm *room) {
 		fmt.Println(roomspassed)
 		fmt.Println(rm.name)
 	}
+}
+
+func AllPaths(Farm []*room, currentRoom *room, Sroom *room, Eroom *room) [][]*room {
+	var Paths [][]*room
+	if currentRoom.name == lastRm.name {
+		for i := 0; i < (len(Paths)); i++ {
+			for k := 0; k < len(Paths[i]); k++ {
+				for t := 0; t < len(Farm); t++ {
+					if Paths[i][k] == Farm[t] {
+						continue
+					}
+				}
+			}
+		}
+	}
+	for p := 0; p < (len(Paths)); p++ {
+		for r := 0; r < len(Sroom.children); r++ {
+		}
+	}
+
+	return Paths
 }

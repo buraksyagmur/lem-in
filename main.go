@@ -101,8 +101,7 @@ func main() {
 	// for i:= 0 ; i < len(Farm) ; i++ {
 	// ShortestPath(Farm[i])
 	// }
-	ShortestPath(Farm[numOfAnt])
-
+	// ShortestPath(Farm[numOfAnt])
 	antfarm := CreatingAnts()
 	walk(antfarm)
 	// ants
