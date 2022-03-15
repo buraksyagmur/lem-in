@@ -10,13 +10,12 @@ type room struct {
 	children [](*room)
 	name     string
 	occupied bool
-	distance int
 }
 
 var (
 	firstRm *room
 	lastRm  *room
-	Farm    []*room
+	Farm    []room
 )
 
 func Rooms(roomsandConnections []string) *room {
@@ -56,11 +55,11 @@ func Rooms(roomsandConnections []string) *room {
 		}
 	}
 	// fmt.Println("roomname", destConnRmNames)
-	antFarmRooms = addRoom(antFarmRooms, startRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames, 0)
+	antFarmRooms = addRoom(antFarmRooms, startRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 	return antFarmRooms
 }
 
-func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName string, beginConnRmNames, destConnRmNames []string, dist int) {
+func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName string, beginConnRmNames, destConnRmNames []string) {
 	childrenRm := []*room{}
 	for c := 0; c < len(beginConnRmNames); c++ {
 		beginRmName := beginConnRmNames[c]
@@ -73,17 +72,16 @@ func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName st
 				parent:   roomToAdd,
 				name:     destRmName,
 				occupied: false,
-				distance: dist + 1,
 			})
 			// fmt.Println("2nd", childrenRm)
 			// fmt.Println("children", roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 			// fmt.Println(childrenRm)
-			addRoom(roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames, dist+1)
+			addRoom(roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		}
 	}
 }
 
-func addRoom(root *room, rmToAddName string, startRmName, endRmName string, beginConnRmNames, destConnRmNames []string, dist int) *room {
+func addRoom(root *room, rmToAddName string, startRmName, endRmName string, beginConnRmNames, destConnRmNames []string) *room {
 	var roomToAdd *room
 	if rmToAddName == endRmName { // end room / base case
 		fmt.Println("___________________________________________________")
@@ -95,7 +93,6 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 			children: nil,
 			name:     rmToAddName,
 			occupied: false,
-			distance: dist,
 		}
 		lastRm.parent.children = append(lastRm.parent.children, lastRm)
 		// fmt.Println("endrm", *lastRm)
@@ -107,9 +104,8 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 			parent:   nil,
 			name:     rmToAddName,
 			occupied: true,
-			distance: dist,
 		}
-		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames, dist)
+		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		firstRm = roomToAdd
 		// fmt.Println("firstroom", *firstRm)
 	} else {
@@ -119,14 +115,12 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 			parent:   root,
 			name:     rmToAddName,
 			occupied: false,
-			distance: dist,
 		}
 		roomToAdd.parent.children = append(roomToAdd.parent.children, roomToAdd)
-		// fmt.Println("vars", roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
-		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames, dist)
+		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		// fmt.Println("roomtoadd", *roomToAdd)
 	}
-	Farm = append(Farm, roomToAdd)
+	Farm = append(Farm, *roomToAdd)
 	// fmt.Println("firstrm", firstRm)
 	return roomToAdd
 }

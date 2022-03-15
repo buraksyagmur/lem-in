@@ -8,8 +8,9 @@ type ant struct {
 }
 
 var (
-	ants        []ant
-	roomspassed int
+	ants         []ant
+	roomspassed  int
+	Combinations [][]*room
 )
 
 func CreatingAnts() []ant {
@@ -28,26 +29,32 @@ func CreatingAnts() []ant {
 	return ants
 }
 
-// have to consider the first ant in to the end room
-func (a *ant) move(out, in *room) {
-	if !in.occupied {
-		out.occupied = false
-		in.occupied = true
-		a.curRoom = in
-	}
-}
+// // have to consider the first ant in to the end room
+// func (a *ant) move(out, in *room) {
+// 	if !in.occupied {
+// 		out.occupied = false
+// 		in.occupied = true
+// 		a.curRoom = in
+// 	}
+// }
 
-// have to consider the last ant out
-func (a *ant) startMove(in *room) {
-	if !in.occupied {
-		in.occupied = true
-		a.curRoom = in
-	}
-}
+// // have to consider the last ant out
+// func (a *ant) startMove(in *room) {
+// 	if !in.occupied {
+// 		in.occupied = true
+// 		a.curRoom = in
+// 	}
+// }
 
-func (a *ant) checkState(rm *room) {
-	if rm != lastRm {
+// func (a *ant) checkState(rm *room) {
+// 	if rm != lastRm {
+// 	}
+// }
+func SwapFarm(Farm []room) {
+	for i := 0; i < len(Farm)/2; i++ {
+		Farm[i], Farm[(len(Farm)-1)-i] = Farm[(len(Farm)-1)-i], Farm[i]
 	}
+
 }
 
 func walk(antfarm []ant) {
@@ -115,4 +122,56 @@ func AllPaths(Farm []*room, currentRoom *room, Sroom *room, Eroom *room) [][]*ro
 	}
 
 	return Paths
+}
+
+func FindAllPossiblePaths(path []*room, currentRoom room, paths *[][]*room, previousRoom *room) {
+	if currentRoom.name == lastRm.name {
+		var skipPath bool
+		for i := 0; i < len(path); i++ {
+			if path[i].name == firstRm.name {
+				skipPath = true
+				break
+			}
+		}
+
+		if len(*paths) == 0 {
+			*paths = append((*paths), nil)
+		} else if (*paths)[len(*paths)-1] != nil {
+			*paths = append((*paths), nil)
+		}
+
+		for i := 0; i < len(path); i++ {
+			if !skipPath {
+				(*paths)[len(*paths)-1] = append((*paths)[len(*paths)-1], path[i])
+			} else {
+				break
+			}
+		}
+	}
+
+	for i := 0; i < len(currentRoom.children); i++ {
+		var toContinue bool
+
+		for k := 0; k < len(path); k++ {
+			if path[k].name == currentRoom.children[i].name {
+				toContinue = true
+				break
+			}
+		}
+
+		if !toContinue {
+			pathToPass := path
+			pathToPass = append(pathToPass, currentRoom.children[i])
+			FindAllPossiblePaths(pathToPass, *currentRoom.children[i], paths, &currentRoom)
+			pathToPass = path
+		}
+	}
+
+	if paths != nil {
+		for i := 0; i < len(*paths); i++ {
+			if (*paths)[i] == nil {
+				*paths = append((*paths)[:i], (*paths)[i+1:]...)
+			}
+		}
+	}
 }

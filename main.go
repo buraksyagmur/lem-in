@@ -15,9 +15,11 @@ var (
 	slccontent          []string
 	connectionStartLine int
 	// RoomsandConnections []string
-	numOfAnt    int
-	nameofStart string
-	nameofEnd   string
+	numOfAnt      int
+	nameofStart   string
+	nameofEnd     string
+	numberofRooms int
+	antFarmRooms  *room
 )
 
 func readnote(textfile string) []string {
@@ -90,20 +92,29 @@ func main() {
 	// }
 
 	// constructing rooms
-	antFarmRooms := Rooms(roomsandConnections)
-	fmt.Println("antFarmRooms", antFarmRooms)
+	antFarmRooms = Rooms(roomsandConnections)
+	// fmt.Println("antFarmRooms", antFarmRooms)
 	// fmt.Println(lastRm, "lastroom")
-	fmt.Println("Farm1", *Farm[0])
-	fmt.Println("Farm2", *Farm[1])
-	fmt.Println("Farm3", *Farm[2])
-	fmt.Println("Farm", Farm)
-	fmt.Println("Farm1", Farm)
-	// for i:= 0 ; i < len(Farm) ; i++ {
-	// ShortestPath(Farm[i])
-	// }
+	// fmt.Println("Farm1", Farm[0])
+	// fmt.Println("Farm2", Farm[1])
+	// fmt.Println("Farm3", Farm[2])
+	// fmt.Println("Farm", Farm)
+	// fmt.Println("Farm1", Farm)
+
 	// ShortestPath(Farm[numOfAnt])
-	antfarm := CreatingAnts()
-	walk(antfarm)
+	SwapFarm(Farm)
+	// Farm = append(Farm, *lastRm)
+	// numberofRooms = len(Farm)
+	for i := 0; i < len(Farm); i++ {
+		fmt.Println(Farm[i])
+	}
+
+	fmt.Println("thirdone", *Farm[3].children[0])
+	fmt.Println("fourthone", *Farm[4].children[0])
+	// antfarm := CreatingAnts()
+	// walk(antfarm)
+	// FindAllPossiblePaths(make([]*room, 0), Farm[0], &Combinations, &Farm[0])
+	// fmt.Println("combinations", Combinations)
 	// ants
 	// ants := make([]ant, numOfAnt)
 	// fmt.Println("no. of ants: ", len(ants))
