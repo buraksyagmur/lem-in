@@ -111,6 +111,10 @@ func main() {
 
 	fmt.Println("thirdone", *Farm[3].children[0])
 	fmt.Println("fourthone", *Farm[4].children[0])
+	fmt.Println(lastRm)
+	fmt.Println("three", *Farm[4].children[0].parent[0])
+	fmt.Println("four", *Farm[4].children[0].parent[1])
+	fmt.Println("four", *Farm[3].children[0].parent[0])
 	// antfarm := CreatingAnts()
 	// walk(antfarm)
 	// FindAllPossiblePaths(make([]*room, 0), Farm[0], &Combinations, &Farm[0])

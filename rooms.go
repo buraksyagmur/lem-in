@@ -6,16 +6,19 @@ import (
 )
 
 type room struct {
-	parent   *room
-	children [](*room)
+	parent   [](*room)
 	name     string
+	children [](*room)
 	occupied bool
 }
 
 var (
-	firstRm *room
-	lastRm  *room
-	Farm    []room
+	firstRm  *room
+	lastRm   *room
+	Farm     []room
+	test     []*room
+	count    int
+	checkdup []string
 )
 
 func Rooms(roomsandConnections []string) *room {
@@ -60,7 +63,7 @@ func Rooms(roomsandConnections []string) *room {
 }
 
 func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName string, beginConnRmNames, destConnRmNames []string) {
-	childrenRm := []*room{}
+	// childrenRm := []*room{}
 	for c := 0; c < len(beginConnRmNames); c++ {
 		beginRmName := beginConnRmNames[c]
 		if beginRmName == rmToAddName {
@@ -68,14 +71,15 @@ func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName st
 			destRmName := destConnRmNames[c]
 			fmt.Printf("Adding new child room (%s) from the %dth connection to %s\n", destRmName, c, rmToAddName)
 			// fmt.Println(childrenRm)
-			childrenRm = append(childrenRm, &room{
-				parent:   roomToAdd,
-				name:     destRmName,
-				occupied: false,
-			})
+			// childrenRm = append(childrenRm, &room{
+			// 	parent:   roomToAdd,
+			// 	name:     destRmName,
+			// 	occupied: false,
+			// })
 			// fmt.Println("2nd", childrenRm)
 			// fmt.Println("children", roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 			// fmt.Println(childrenRm)
+			fmt.Println("infos", roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 			addRoom(roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		}
 	}
@@ -83,19 +87,30 @@ func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName st
 
 func addRoom(root *room, rmToAddName string, startRmName, endRmName string, beginConnRmNames, destConnRmNames []string) *room {
 	var roomToAdd *room
+	checkdup = append(checkdup, rmToAddName)
 	if rmToAddName == endRmName { // end room / base case
 		fmt.Println("___________________________________________________")
 		fmt.Printf("constructing end room %s...\n", rmToAddName)
-		fmt.Println("")
-		fmt.Println("")
-		lastRm = &room{
-			parent:   root,
-			children: nil,
-			name:     rmToAddName,
-			occupied: false,
+		test = nil
+		test = append(test, root)
+		fmt.Println(rmToAddName)
+		if dup(checkdup) != rmToAddName {
+			lastRm = &room{
+				parent:   test,
+				name:     rmToAddName,
+				children: nil,
+				occupied: false,
+			}
+		} else {
+			fmt.Println("parent", lastRm.parent, "root", root)
+			lastRm.parent = append(lastRm.parent, root)
+
 		}
-		lastRm.parent.children = append(lastRm.parent.children, lastRm)
+
+		countofparents := len(lastRm.parent)
+		lastRm.parent[countofparents-1].children = append(lastRm.parent[countofparents-1].children, lastRm)
 		// fmt.Println("endrm", *lastRm)
+
 		return lastRm
 	} else if rmToAddName == startRmName { // start Room special case
 		fmt.Println("___________________________________________________")
@@ -107,16 +122,30 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		}
 		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		firstRm = roomToAdd
-		// fmt.Println("firstroom", *firstRm)
+		//  fmt.Println("firstroom", *firstRm)
 	} else {
 		fmt.Println("___________________________________________________")
 		fmt.Printf("constructing other room %s...\n", rmToAddName)
-		roomToAdd = &room{
-			parent:   root,
-			name:     rmToAddName,
-			occupied: false,
+		test = nil
+		test = append(test, root)
+
+		if dup(checkdup) != rmToAddName {
+			roomToAdd = &room{
+				parent:   test,
+				name:     rmToAddName,
+				occupied: false,
+			}
+		} else {
+			roomToAdd = &room{
+				parent:   append(roomToAdd.parent, root),
+				name:     rmToAddName,
+				occupied: false,
+			}
 		}
-		roomToAdd.parent.children = append(roomToAdd.parent.children, roomToAdd)
+
+		countofparents := len(roomToAdd.parent)
+		roomToAdd.parent[countofparents-1].children = append(roomToAdd.parent[countofparents-1].children, roomToAdd)
+		fmt.Println("parent.children", *roomToAdd.parent[countofparents-1].children[0])
 		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		// fmt.Println("roomtoadd", *roomToAdd)
 	}
@@ -151,3 +180,14 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 // 		printRoom(root.children[i])
 // 	}
 // }
+func dup(s []string) string {
+	duplicate := make(map[string]bool)
+	for i := 0; i < len(s); i++ {
+		if duplicate[s[i]] == true {
+			return s[i]
+		} else {
+			duplicate[s[i]] = true
+		}
+	}
+	return ""
+}
