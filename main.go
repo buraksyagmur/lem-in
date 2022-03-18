@@ -103,18 +103,11 @@ func main() {
 
 	// ShortestPath(Farm[numOfAnt])
 	SwapFarm(Farm)
-	// Farm = append(Farm, *lastRm)
+	Farm = append(Farm, *lastRm)
 	// numberofRooms = len(Farm)
 	for i := 0; i < len(Farm); i++ {
-		fmt.Println(Farm[i])
+		fmt.Println(i, Farm[i])
 	}
-
-	fmt.Println("thirdone", *Farm[3].children[0])
-	fmt.Println("fourthone", *Farm[4].children[0])
-	fmt.Println(lastRm)
-	fmt.Println("three", *Farm[4].children[0].parent[0])
-	fmt.Println("four", *Farm[4].children[0].parent[1])
-	fmt.Println("four", *Farm[3].children[0].parent[0])
 	// antfarm := CreatingAnts()
 	// walk(antfarm)
 	// FindAllPossiblePaths(make([]*room, 0), Farm[0], &Combinations, &Farm[0])

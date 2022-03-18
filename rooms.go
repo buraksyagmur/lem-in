@@ -79,7 +79,7 @@ func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName st
 			// fmt.Println("2nd", childrenRm)
 			// fmt.Println("children", roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 			// fmt.Println(childrenRm)
-			fmt.Println("infos", roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
+			// fmt.Println("infos", roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 			addRoom(roomToAdd, destRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		}
 	}
@@ -94,21 +94,31 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		test = nil
 		test = append(test, root)
 		fmt.Println(rmToAddName)
-		if dup(checkdup) != rmToAddName {
+		if len(dup(checkdup)) != 0 {
+			for i := 0; i < len(dup(checkdup)); i++ {
+				if (dup(checkdup)[i]) == rmToAddName {
+					lastRm.parent = append(lastRm.parent, root)
+				} else {
+					lastRm = &room{
+						parent:   test,
+						name:     rmToAddName,
+						children: nil,
+						occupied: false,
+					}
+				}
+			}
+		} else {
 			lastRm = &room{
 				parent:   test,
 				name:     rmToAddName,
 				children: nil,
 				occupied: false,
 			}
-		} else {
-			fmt.Println("parent", lastRm.parent, "root", root)
-			lastRm.parent = append(lastRm.parent, root)
-
+			// fmt.Println("parent", lastRm.parent, "root", root)
 		}
-
 		countofparents := len(lastRm.parent)
 		lastRm.parent[countofparents-1].children = append(lastRm.parent[countofparents-1].children, lastRm)
+		// fmt.Println("lastone", *lastRm.parent[countofparents-1], "count", countofparents)
 		// fmt.Println("endrm", *lastRm)
 
 		return lastRm
@@ -128,16 +138,25 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		fmt.Printf("constructing other room %s...\n", rmToAddName)
 		test = nil
 		test = append(test, root)
-
-		if dup(checkdup) != rmToAddName {
-			roomToAdd = &room{
-				parent:   test,
-				name:     rmToAddName,
-				occupied: false,
+		if len(dup(checkdup)) != 0 {
+			for i := 0; i < len(dup(checkdup)); i++ {
+				if (dup(checkdup)[i]) == rmToAddName {
+					roomToAdd = &room{
+						parent:   append(roomToAdd.parent, root),
+						name:     rmToAddName,
+						occupied: false,
+					}
+				} else {
+					roomToAdd = &room{
+						parent:   test,
+						name:     rmToAddName,
+						occupied: false,
+					}
+				}
 			}
 		} else {
 			roomToAdd = &room{
-				parent:   append(roomToAdd.parent, root),
+				parent:   test,
 				name:     rmToAddName,
 				occupied: false,
 			}
@@ -145,7 +164,7 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 
 		countofparents := len(roomToAdd.parent)
 		roomToAdd.parent[countofparents-1].children = append(roomToAdd.parent[countofparents-1].children, roomToAdd)
-		fmt.Println("parent.children", *roomToAdd.parent[countofparents-1].children[0])
+		// fmt.Println("parent.children", *roomToAdd.parent[countofparents-1].children[0])
 		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		// fmt.Println("roomtoadd", *roomToAdd)
 	}
@@ -180,14 +199,15 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 // 		printRoom(root.children[i])
 // 	}
 // }
-func dup(s []string) string {
+func dup(s []string) []string {
+	var result []string
 	duplicate := make(map[string]bool)
 	for i := 0; i < len(s); i++ {
 		if duplicate[s[i]] == true {
-			return s[i]
+			result = append(result, s[i])
 		} else {
 			duplicate[s[i]] = true
 		}
 	}
-	return ""
+	return result
 }
