@@ -54,7 +54,6 @@ func SwapFarm(Farm []room) {
 	for i := 0; i < len(Farm)/2; i++ {
 		Farm[i], Farm[(len(Farm)-1)-i] = Farm[(len(Farm)-1)-i], Farm[i]
 	}
-
 }
 
 func walk(antfarm []ant) {
@@ -103,25 +102,27 @@ func ShortestPath(rm *room) {
 	}
 }
 
-func AllPaths(Farm []*room, currentRoom *room, Sroom *room, Eroom *room) [][]*room {
-	var Paths [][]*room
-	if currentRoom.name == lastRm.name {
-		for i := 0; i < (len(Paths)); i++ {
-			for k := 0; k < len(Paths[i]); k++ {
-				for t := 0; t < len(Farm); t++ {
-					if Paths[i][k] == Farm[t] {
-						continue
-					}
-				}
-			}
+func AllPaths(currentRoom *room) [][]*room {
+	var allways [][]*room
+	var way []*room
+
+	for i := 0; i < len(currentRoom.children); i++ {
+		way = append(way, currentRoom.children[i])
+		allways = append(allways, way)
+	}
+	for k := 0; k < len(currentRoom.children); k++ {
+		if currentRoom.children[k].name != lastRm.name {
+			AllPaths(currentRoom.children[k])
 		}
 	}
-	for p := 0; p < (len(Paths)); p++ {
-		for r := 0; r < len(Sroom.children); r++ {
-		}
+	for m := 0; m < len(allways); m++ {
+		allways[m] = append(allways[m], lastRm)
+	}
+	if len(allways) == 1 {
+		allways[0] = append(allways[0], lastRm)
 	}
 
-	return Paths
+	return allways
 }
 
 func FindAllPossiblePaths(path []*room, currentRoom room, paths *[][]*room, previousRoom *room) {

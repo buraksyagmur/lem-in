@@ -108,10 +108,14 @@ func main() {
 	for i := 0; i < len(Farm); i++ {
 		fmt.Println(i, Farm[i])
 	}
+
+	fmt.Println("allpath",AllPaths(firstRm))
 	// antfarm := CreatingAnts()
 	// walk(antfarm)
 	// FindAllPossiblePaths(make([]*room, 0), Farm[0], &Combinations, &Farm[0])
-	// fmt.Println("combinations", Combinations)
+	// for k := 0; k < len(Combinations); k++ {
+	// 	fmt.Println("id ", k, "combinations", Combinations[k])
+	// }
 	// ants
 	// ants := make([]ant, numOfAnt)
 	// fmt.Println("no. of ants: ", len(ants))
