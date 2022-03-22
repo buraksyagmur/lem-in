@@ -66,6 +66,9 @@ func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName st
 	// childrenRm := []*room{}
 	for c := 0; c < len(beginConnRmNames); c++ {
 		beginRmName := beginConnRmNames[c]
+		if startRmName == destConnRmNames[c] {
+			beginConnRmNames[c], destConnRmNames[c] = destConnRmNames[c], beginConnRmNames[c]
+		}
 		if beginRmName == rmToAddName {
 			// fmt.Println("dsf", childrenRm)
 			destRmName := destConnRmNames[c]
@@ -165,6 +168,7 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		countofparents := len(roomToAdd.parent)
 		roomToAdd.parent[countofparents-1].children = append(roomToAdd.parent[countofparents-1].children, roomToAdd)
 		// fmt.Println("parent.children", *roomToAdd.parent[countofparents-1].children[0])
+		fmt.Println(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		// fmt.Println("roomtoadd", *roomToAdd)
 	}

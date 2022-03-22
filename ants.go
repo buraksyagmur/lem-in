@@ -11,6 +11,9 @@ var (
 	ants         []ant
 	roomspassed  int
 	Combinations [][]*room
+	allways      [][]*room
+	way          []*room
+	way2         []*room
 )
 
 func CreatingAnts() []ant {
@@ -103,9 +106,6 @@ func ShortestPath(rm *room) {
 }
 
 func AllPaths(currentRoom *room) [][]*room {
-	var allways [][]*room
-	var way []*room
-
 	for i := 0; i < len(currentRoom.children); i++ {
 		way = append(way, currentRoom.children[i])
 		allways = append(allways, way)
@@ -120,6 +120,22 @@ func AllPaths(currentRoom *room) [][]*room {
 	}
 	if len(allways) == 1 {
 		allways[0] = append(allways[0], lastRm)
+	}
+
+	return allways
+}
+
+func FindingPath(currentRoom *room) [][]*room {
+	if len(currentRoom.children) != 0 {
+		for i := 0; i < len(currentRoom.children); i++ {
+			fmt.Println("number of i", i, "room", *currentRoom, "child", *currentRoom.children[i])
+			way2 = append(way2, currentRoom.children[i])
+			FindingPath(currentRoom.children[i])
+		}
+	} else {
+		way2 = append(way2, lastRm)
+		allways = append(allways, way2)
+		way2 = nil
 	}
 
 	return allways

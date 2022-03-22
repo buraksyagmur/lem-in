@@ -108,8 +108,11 @@ func main() {
 	for i := 0; i < len(Farm); i++ {
 		fmt.Println(i, Farm[i])
 	}
-
-	fmt.Println("allpath",AllPaths(firstRm))
+fmt.Println("parents", *Farm[17].parent[0])
+fmt.Println("parents", *Farm[17].parent[1])
+	// fmt.Println("allpath",AllPaths(firstRm))
+	fmt.Println("allpath", FindingPath(firstRm))
+	fmt.Println("numberofways", len(allways))
 	// antfarm := CreatingAnts()
 	// walk(antfarm)
 	// FindAllPossiblePaths(make([]*room, 0), Farm[0], &Combinations, &Farm[0])
