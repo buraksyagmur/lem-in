@@ -16,6 +16,7 @@ var (
 	firstRm  *room
 	lastRm   *room
 	Farm     []room
+	Farm2    []*room
 	test     []*room
 	count    int
 	checkdup []string
@@ -68,6 +69,13 @@ func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName st
 		beginRmName := beginConnRmNames[c]
 		if startRmName == destConnRmNames[c] {
 			beginConnRmNames[c], destConnRmNames[c] = destConnRmNames[c], beginConnRmNames[c]
+		}
+		if rmToAddName != startRmName {
+			for m := 0; m < len(firstRm.children); m++ {
+				if firstRm.children[m].name == destConnRmNames[c] && startRmName != beginConnRmNames[c] {
+					beginConnRmNames[c], destConnRmNames[c] = destConnRmNames[c], beginConnRmNames[c]
+				}
+			}
 		}
 		if beginRmName == rmToAddName {
 			// fmt.Println("dsf", childrenRm)
@@ -128,14 +136,15 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 	} else if rmToAddName == startRmName { // start Room special case
 		fmt.Println("___________________________________________________")
 		fmt.Printf("constructing start room %s...\n", rmToAddName)
-		roomToAdd = &room{
+		firstRm = &room{
 			parent:   nil,
 			name:     rmToAddName,
 			occupied: true,
 		}
-		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
-		firstRm = roomToAdd
+		findChildren(firstRm, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
+		// firstRm = roomToAdd
 		//  fmt.Println("firstroom", *firstRm)
+		Farm = append(Farm, *firstRm)
 	} else {
 		fmt.Println("___________________________________________________")
 		fmt.Printf("constructing other room %s...\n", rmToAddName)
@@ -144,10 +153,13 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		if len(dup(checkdup)) != 0 {
 			for i := 0; i < len(dup(checkdup)); i++ {
 				if (dup(checkdup)[i]) == rmToAddName {
-					roomToAdd = &room{
-						parent:   append(roomToAdd.parent, root),
-						name:     rmToAddName,
-						occupied: false,
+					// fmt.Println("roomtoaddparent", roomToAdd, "Farm", Farm)
+					for t := 0; t < len(Farm); t++ {
+						if Farm[t].name == rmToAddName {
+							roomToAdd = &Farm[t]
+							roomToAdd.parent = append(roomToAdd.parent, root)
+							// fmt.Println("roomtoaddparent", roomToAdd)
+						}
 					}
 				} else {
 					roomToAdd = &room{
@@ -171,8 +183,16 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		fmt.Println(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		// fmt.Println("roomtoadd", *roomToAdd)
+		Farm = append(Farm, *roomToAdd)
 	}
-	Farm = append(Farm, *roomToAdd)
+
+	for k := 0; k < len(Farm); k++ {
+		if Farm[k].name == "" {
+			Farm[k].parent = nil
+			Farm[k].children = nil
+		}
+	}
+
 	// fmt.Println("firstrm", firstRm)
 	return roomToAdd
 }
