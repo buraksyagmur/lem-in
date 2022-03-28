@@ -108,9 +108,8 @@ func main() {
 	for i := 0; i < len(Farm); i++ {
 		fmt.Println(i, Farm[i])
 	}
-	fmt.Println(Farm[0].children[0])
-	fmt.Println(Farm[0].children[1])
-	fmt.Println(Farm[0].children[2])
+
+	
 	// fmt.Println("allpath",AllPaths(firstRm))
 	// fmt.Println("allpath", FindingPath(firstRm))
 	// fmt.Println("numberofways", len(allways))

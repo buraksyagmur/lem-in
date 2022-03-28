@@ -55,7 +55,7 @@ C2-C3
 C3-I4
 D1-D2
 D1-F2
-D2-E2
+E2-D2
 D2-D3
 D2-F3
 D3-end

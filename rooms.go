@@ -178,19 +178,29 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		}
 
 		countofparents := len(roomToAdd.parent)
-		roomToAdd.parent[countofparents-1].children = append(roomToAdd.parent[countofparents-1].children, roomToAdd)
+		for r := 0; r < len(roomToAdd.parent[countofparents-1].children); r++ {
+			if roomToAdd.parent[countofparents-1].children[r].name == roomToAdd.name {
+				roomToAdd.parent[countofparents-1].children[r] = roomToAdd
+			} else {
+				roomToAdd.parent[countofparents-1].children = append(roomToAdd.parent[countofparents-1].children, roomToAdd)
+			}
+		}
+
 		// fmt.Println("parent.children", *roomToAdd.parent[countofparents-1].children[0])
-		fmt.Println(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
+		// fmt.Println(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		findChildren(roomToAdd, rmToAddName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 		// fmt.Println("roomtoadd", *roomToAdd)
-		Farm = append(Farm, *roomToAdd)
-	}
+		// for p := 0; p < len(Farm); p++ {
+		// 	if Farm[p].name == roomToAdd.name {
 
-	for k := 0; k < len(Farm); k++ {
-		if Farm[k].name == "" {
-			Farm[k].parent = nil
-			Farm[k].children = nil
-		}
+		// 		fmt.Println("old", Farm)
+		// 		RemoveElement(Farm, p)
+		// 		fmt.Println("new", Farm)
+
+		// }
+		Farm = CheckFarmDup(Farm, roomToAdd.name)
+		fmt.Println("roomtoaddname", roomToAdd.name)
+		Farm = append(Farm, *roomToAdd)
 	}
 
 	// fmt.Println("firstrm", firstRm)
@@ -234,4 +244,21 @@ func dup(s []string) []string {
 		}
 	}
 	return result
+}
+
+func RemoveElement(s []room, i int) []room {
+	return append(s[:i], s[i+1:]...)
+}
+
+func CheckFarmDup(s []room, t string) []room {
+	for k := 0; k < len(s); k++ {
+		if s[k].name == t {
+			// fmt.Println("oldname", s[k].name, "roomtoadd", t)
+			s = RemoveElement(s, k)
+			// fmt.Println("newname", s[k].name, "roomtoadd", t)
+			CheckFarmDup(s, t)
+		}
+	}
+
+	return s
 }
