@@ -109,7 +109,6 @@ func main() {
 		fmt.Println(i, Farm[i])
 	}
 
-	
 	// fmt.Println("allpath",AllPaths(firstRm))
 	// fmt.Println("allpath", FindingPath(firstRm))
 	// fmt.Println("numberofways", len(allways))

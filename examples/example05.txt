@@ -30,8 +30,8 @@ G2 3 5
 G3 4 5
 G4 6 5
 H3-F2
-H3-H4
-H4-A2
+H4-H3
+A2-H4
 start-G0
 G0-G1
 G1-G2
@@ -56,11 +56,14 @@ C3-I4
 D1-D2
 D1-F2
 E2-D2
-D2-D3
 D2-F3
+D2-D3
 D3-end
 F2-F3
 F3-F4
 F4-end
 I4-I5
 I5-end
+
+
+
