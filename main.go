@@ -97,10 +97,9 @@ func main() {
 	// fmt.Println(lastRm, "lastroom")
 	// fmt.Println("Farm1", Farm[0])
 	// fmt.Println("Farm2", Farm[1])
-	// fmt.Println("Farm3", Farm[2])
 	// fmt.Println("Farm", Farm)
 	// fmt.Println("Farm1", Farm)
-
+	
 	// ShortestPath(Farm[numOfAnt])
 	SwapFarm(Farm)
 	Farm = append(Farm, *lastRm)
@@ -108,6 +107,7 @@ func main() {
 	for i := 0; i < len(Farm); i++ {
 		fmt.Println(i, Farm[i])
 	}
+	
 
 	// fmt.Println("allpath",AllPaths(firstRm))
 	// fmt.Println("allpath", FindingPath(firstRm))
