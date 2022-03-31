@@ -100,6 +100,7 @@ func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName st
 func addRoom(root *room, rmToAddName string, startRmName, endRmName string, beginConnRmNames, destConnRmNames []string) *room {
 	var roomToAdd *room
 	var endroomparent bool = false
+	var anotherbool bool = false
 	checkdup = append(checkdup, rmToAddName)
 	if rmToAddName == endRmName { // end room / base case
 		fmt.Println("___________________________________________________")
@@ -121,7 +122,8 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 				fmt.Println("this is lastroomparent", lastRm.parent[t], "this is root", root)
 				fmt.Println("bool", endroomparent)
 				if lastRm.parent[t].name == root.name {
-					lastRm.parent[t] = root
+					lastRm.parent[t].children = root.children
+					lastRm.parent[t].parent = root.parent
 					endroomparent = true
 					fmt.Println(endroomparent)
 				} else if t == parentnumber-1 && !endroomparent {
@@ -170,17 +172,24 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 					// fmt.Println("roomtoaddparent", roomToAdd, "Farm", Farm)
 					for t := 0; t < len(Farm); t++ {
 						if Farm[t].name == rmToAddName {
-							roomToAdd = &Farm[t]
+							roomToAdd.parent = Farm[t].parent
+							roomToAdd.children = Farm[t].children
 							for u := 0; u < len(roomToAdd.parent); u++ {
-								if roomToAdd.parent[u].name != root.name {
-									fmt.Println("sameparent")
+								if roomToAdd.parent[u].name == root.name {
+									roomToAdd.parent[u].parent = root.parent
+									roomToAdd.parent[u].children = root.children
+									anotherbool = true
+
+								} else if  u== len(Farm)-1 && !anotherbool{
+									fmt.Println("thats number of u", u)
+									fmt.Println("notsameparent")
 									roomToAdd.parent = append(roomToAdd.parent, root)
-								} else {
-									roomToAdd.parent[u] = root
+									anotherbool=true
 								}
 							}
 
 							// fmt.Println("roomtoaddparent", roomToAdd)
+							
 						}
 					}
 				} else {
@@ -202,36 +211,35 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		countofparents := len(roomToAdd.parent)
 		countofchildrens := 0
 		fmt.Println("countofparents", countofparents)
-		for y := 0; y < countofparents; y++ {
-			var somebool bool = true
-			countofchildrens = len(roomToAdd.parent[y].children)
-			fmt.Println("countofchildrens", countofchildrens)
-			fmt.Println("roomtoadd", roomToAdd)
-			fmt.Println("parentnname", roomToAdd.parent[y])
-			if len(roomToAdd.parent[y].children) == 0 {
-				roomToAdd.parent[y].children = append(roomToAdd.parent[y].children, roomToAdd)
-			} else {
-				for r := 0; r < countofchildrens; r++ {
-					fmt.Println("childrenname", roomToAdd.parent[y].children[r])
-					fmt.Println("parentnname", roomToAdd.parent[y])
-					fmt.Println("count of y", y, "count of r", r)
+		var somebool bool = true
+		countofchildrens = len(roomToAdd.parent[countofparents-1].children)
+		fmt.Println("countofchildrens", countofchildrens)
+		fmt.Println("roomtoadd", roomToAdd)
+		fmt.Println("parentnname", roomToAdd.parent[countofparents-1])
+		if len(roomToAdd.parent[countofparents-1].children) == 0 {
+			roomToAdd.parent[countofparents-1].children = append(roomToAdd.parent[countofparents-1].children, roomToAdd)
+			fmt.Println("firstchildrenofparent", &roomToAdd.parent[countofparents-1].children[0])
+		} else {
+			for r := 0; r < countofchildrens; r++ {
+				fmt.Println("childrenname", roomToAdd.parent[countofparents-1].children[r])
+				fmt.Println("parentnname", roomToAdd.parent[countofparents-1])
 
-					if roomToAdd.parent[y].children[r].name == roomToAdd.name {
-						roomToAdd.parent[y].children[r] = roomToAdd
-						fmt.Println("thatssame")
-						fmt.Println("childrenname2", roomToAdd.parent[y].children[r])
-						fmt.Println("parentnname2", roomToAdd.parent[y])
-						somebool = false
-					}
+				if roomToAdd.parent[countofparents-1].children[r].name == roomToAdd.name {
+					roomToAdd.parent[countofparents-1].children[r] = roomToAdd
+					fmt.Println("thatssame")
+					fmt.Println("childrenname2", roomToAdd.parent[countofparents-1].children[r])
+					fmt.Println("parentnname2", roomToAdd.parent[countofparents-1])
+					somebool = false
 				}
-				if somebool {
-					fmt.Println("notsame")
-					roomToAdd.parent[y].children = append(roomToAdd.parent[y].children, roomToAdd)
-					fmt.Println("parentnname3", roomToAdd.parent[y])
-				}
-
 			}
+			if somebool {
+				fmt.Println("notsame")
+				roomToAdd.parent[countofparents-1].children = append(roomToAdd.parent[countofparents-1].children, roomToAdd)
+				fmt.Println("parentnname3", roomToAdd.parent[countofparents-1])
+			}
+
 		}
+
 		fmt.Println("roomtoadd2", roomToAdd)
 
 		// fmt.Println("parent.children", *roomToAdd.parent[countofparents-1].children[0])
