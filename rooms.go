@@ -116,25 +116,37 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 			}
 			firstendrm = 1
 		} else {
-			for t := 0; t < len(lastRm.parent); t++ {
+			parentnumber := len(lastRm.parent)
+			for t := 0; t < parentnumber; t++ {
+				fmt.Println("this is lastroomparent", lastRm.parent[t], "this is root", root)
+				fmt.Println("bool", endroomparent)
 				if lastRm.parent[t].name == root.name {
+					lastRm.parent[t] = root
 					endroomparent = true
-				} else if t == len(lastRm.parent)-1 && !endroomparent {
+					fmt.Println(endroomparent)
+				} else if t == parentnumber-1 && !endroomparent {
 					lastRm.parent = append(lastRm.parent, root)
+					fmt.Println("endroomappenused")
 				}
 			}
+			fmt.Println("bool2", endroomparent)
+			fmt.Println("firstroomcheck", firstendrm)
 		}
 		// fmt.Println("parent", lastRm.parent, "root", root)
 
 		countofparents := len(lastRm.parent)
-		lastRm.parent[countofparents-1].children = append(lastRm.parent[countofparents-1].children, lastRm)
+		if !endroomparent {
+			lastRm.parent[countofparents-1].children = append(lastRm.parent[countofparents-1].children, lastRm)
+		}
+
 		// fmt.Println("lastone", *lastRm.parent[countofparents-1], "count", countofparents)
 		// fmt.Println("endrm", *lastRm)
 		fmt.Println("endroom", lastRm)
-		for t := 0; t < len(lastRm.parent); t++ {
-			fmt.Println("endroomparents", lastRm.parent[t])
+		for p := 0; p < len(lastRm.parent); p++ {
+			fmt.Println("endroomparents", lastRm.parent[p])
 		}
 		return lastRm
+
 	} else if rmToAddName == startRmName { // start Room special case
 		fmt.Println("___________________________________________________")
 		fmt.Printf("constructing start room %s...\n", rmToAddName)
