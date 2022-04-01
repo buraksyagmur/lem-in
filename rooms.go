@@ -174,13 +174,15 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 						if Farm[t].name == rmToAddName {
 							roomToAdd.parent = Farm[t].parent
 							roomToAdd.children = Farm[t].children
+							fmt.Println("insidethisifcondition")
 							for u := 0; u < len(roomToAdd.parent); u++ {
 								if roomToAdd.parent[u].name == root.name {
 									roomToAdd.parent[u].parent = root.parent
 									roomToAdd.parent[u].children = root.children
+									fmt.Println("sameparent")
 									anotherbool = true
 
-								} else if  u== len(Farm)-1 && !anotherbool{
+								} else if  u== len(roomToAdd.parent)-1 && !anotherbool{
 									fmt.Println("thats number of u", u)
 									fmt.Println("notsameparent")
 									roomToAdd.parent = append(roomToAdd.parent, root)
