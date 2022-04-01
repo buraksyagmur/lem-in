@@ -166,14 +166,24 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		fmt.Printf("constructing other room %s...\n", rmToAddName)
 		test = nil
 		test = append(test, root)
+		fmt.Println("---------roomtoadd--------", roomToAdd)
 		if len(dup(checkdup)) != 0 {
 			for i := 0; i < len(dup(checkdup)); i++ {
 				if (dup(checkdup)[i]) == rmToAddName {
 					// fmt.Println("roomtoaddparent", roomToAdd, "Farm", Farm)
 					for t := 0; t < len(Farm); t++ {
 						if Farm[t].name == rmToAddName {
+							fmt.Println(t, Farm, roomToAdd)
+							if roomToAdd == nil {
+								roomToAdd = &room{
+									parent:   test,
+									name:     rmToAddName,
+									occupied: false,
+								}
+							}
 							roomToAdd.parent = Farm[t].parent
 							roomToAdd.children = Farm[t].children
+							fmt.Println("secondroomtoadd", roomToAdd)
 							fmt.Println("insidethisifcondition")
 							for u := 0; u < len(roomToAdd.parent); u++ {
 								if roomToAdd.parent[u].name == root.name {
@@ -182,16 +192,16 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 									fmt.Println("sameparent")
 									anotherbool = true
 
-								} else if  u== len(roomToAdd.parent)-1 && !anotherbool{
+								} else if u == len(roomToAdd.parent)-1 && !anotherbool {
 									fmt.Println("thats number of u", u)
 									fmt.Println("notsameparent")
 									roomToAdd.parent = append(roomToAdd.parent, root)
-									anotherbool=true
+									anotherbool = true
 								}
 							}
 
 							// fmt.Println("roomtoaddparent", roomToAdd)
-							
+
 						}
 					}
 				} else {
