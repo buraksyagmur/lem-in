@@ -105,25 +105,7 @@ func ShortestPath(rm *room) {
 	}
 }
 
-func AllPaths(currentRoom *room) [][]*room {
-	for i := 0; i < len(currentRoom.children); i++ {
-		way = append(way, currentRoom.children[i])
-		allways = append(allways, way)
-	}
-	for k := 0; k < len(currentRoom.children); k++ {
-		if currentRoom.children[k].name != lastRm.name {
-			AllPaths(currentRoom.children[k])
-		}
-	}
-	for m := 0; m < len(allways); m++ {
-		allways[m] = append(allways[m], lastRm)
-	}
-	if len(allways) == 1 {
-		allways[0] = append(allways[0], lastRm)
-	}
 
-	return allways
-}
 
 func FindingPath(currentRoom *room) [][]*room {
 	if len(currentRoom.children) != 0 {
@@ -133,7 +115,7 @@ func FindingPath(currentRoom *room) [][]*room {
 			FindingPath(currentRoom.children[i])
 		}
 	} else {
-		way2 = append(way2, lastRm)
+
 		allways = append(allways, way2)
 		way2 = nil
 	}

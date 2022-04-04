@@ -108,9 +108,36 @@ func main() {
 		fmt.Println(i, Farm[i])
 	}
 
-	// fmt.Println("allpath",AllPaths(firstRm))
+	
 	// fmt.Println("allpath", FindingPath(firstRm))
-	// fmt.Println("numberofways", len(allways))
+	fmt.Println("numberofways", len(allways))
+	var firstchildrennames []string
+	for l := 0; l < len(firstRm.children); l++ {
+		firstchildrennames = append(firstchildrennames, firstRm.children[l].name)
+	}
+	// var allways2 [][]*room
+	// for y := 0; y < len(allways); y++ {
+	// 	if allways[y][len(allways[y])-1].name == lastRm.name {
+	// 		for e := 0; e < len(firstchildrennames); e++ {
+	// 			if allways[y][0].name == firstchildrennames[e] {
+	// 				allways2 = append(allways2, allways[y])
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// fmt.Println("correctwaysnumber", len(allways2))
+	// for o := 0; o < len(allways2[0]); o++ {
+	// 	fmt.Println("1allcorrectways1", allways2[0][o])
+	// }
+	// for o := 0; o < len(allways2[1]); o++ {
+	// 	fmt.Println("2allcorrectways2", allways2[1][o])
+	// }
+	// for o := 0; o < len(allways2[2]); o++ {
+	// 	fmt.Println("3allcorrectways3", allways2[2][o])
+	// }
+	// for o := 0; o < len(allways2[3]); o++ {
+	// 	fmt.Println("4allcorrectways4", allways2[3][o])
+	// }
 	// antfarm := CreatingAnts()
 	// walk(antfarm)
 	// FindAllPossiblePaths(make([]*room, 0), Farm[0], &Combinations, &Farm[0])
