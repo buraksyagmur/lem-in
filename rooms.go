@@ -183,6 +183,7 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 							}
 							roomToAdd.parent = Farm[t].parent
 							roomToAdd.children = Farm[t].children
+							numberofparents := len(roomToAdd.parent)
 							fmt.Println("secondroomtoadd", roomToAdd)
 							fmt.Println("insidethisifcondition")
 							for u := 0; u < len(roomToAdd.parent); u++ {
@@ -192,18 +193,23 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 									fmt.Println("sameparent")
 									anotherbool = true
 
-								} else if u == len(roomToAdd.parent)-1 && !anotherbool {
+								} else if u == numberofparents-1 && !anotherbool {
 									fmt.Println("thats number of u", u)
 									fmt.Println("notsameparent")
 									roomToAdd.parent = append(roomToAdd.parent, root)
+									fmt.Println("thirdroomtoadd", roomToAdd)
 									anotherbool = true
+									break
+
 								}
 							}
 
-							// fmt.Println("roomtoaddparent", roomToAdd)
+							fmt.Println("lasttime", roomToAdd)
+							break
 
 						}
 					}
+					break
 				} else {
 					roomToAdd = &room{
 						parent:   test,
