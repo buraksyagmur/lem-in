@@ -3,17 +3,20 @@ package main
 import "fmt"
 
 type ant struct {
-	id      int
-	curRoom *room
+	id        int
+	curRoom   *room
+	pathOfAnt []*room
 }
 
 var (
-	ants         []ant
-	roomspassed  int
-	Combinations [][]*room
-	allways      [][]*room
-	way          []*room
-	way2         []*room
+	ants                []ant
+	roomspassed         int
+	Combinations        [][]*room
+	allways             [][]*room
+	way                 []*room
+	way2                []*room
+	cleanway            [][]*room
+	childrenOfFirstRoom int
 )
 
 func CreatingAnts() []ant {
@@ -105,8 +108,6 @@ func ShortestPath(rm *room) {
 	}
 }
 
-
-
 func FindingPath(currentRoom *room) [][]*room {
 	if len(currentRoom.children) != 0 {
 		for i := 0; i < len(currentRoom.children); i++ {
@@ -166,11 +167,43 @@ func FindAllPossiblePaths(path []*room, currentRoom room, paths *[][]*room, prev
 		}
 	}
 
-	if paths != nil {
-		for i := 0; i < len(*paths); i++ {
-			if (*paths)[i] == nil {
-				*paths = append((*paths)[:i], (*paths)[i+1:]...)
+	for i := 0; i < len(*paths); i++ {
+		if (*paths)[i] == nil {
+			*paths = append((*paths)[:i], (*paths)[i+1:]...)
+		}
+	}
+}
+
+func SortPaths(ways [][]*room) [][]*room {
+	for i := 0; i < len(ways)-1; i++ {
+		if len(ways[i]) > len(ways[i+1]) {
+			ways[i], ways[i+1] = ways[i+1], ways[i]
+		}
+	}
+
+	for k := 0; k < len(ways)-1; k++ {
+		if len(ways[len(ways)-1]) < len(ways[k]) {
+			ways[len(ways)-1], ways[k] = ways[k], ways[len(ways)-1]
+		}
+	}
+	return ways
+}
+
+// func FindBestCombinations (ways [][]*room , countOfAnts int) [][]*room{
+
+// return ways
+// }
+
+func ClearPath(ways [][]*room) [][]*room {
+	childrenOfFirstRoom = len(firstRm.children)
+	var countofloop int
+	for i := countofloop + 1; i < len(ways); i++ {
+		for k := 0; k < len(ways[countofloop])-1; k++ {
+			for t := 0; t < len(ways[i])-1; t++ {
+				if ways[countofloop][k].name == ways[i][t].name {
+				}
 			}
 		}
 	}
+	return ways
 }

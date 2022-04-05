@@ -108,7 +108,6 @@ func main() {
 		fmt.Println(i, Farm[i])
 	}
 
-	
 	// fmt.Println("allpath", FindingPath(firstRm))
 	fmt.Println("numberofways", len(allways))
 	var firstchildrennames []string
@@ -147,4 +146,29 @@ func main() {
 	// ants
 	// ants := make([]ant, numOfAnt)
 	// fmt.Println("no. of ants: ", len(ants))
+
+	var allPaths [][]*room
+	FindAllPossiblePaths(make([]*room, 0), Farm[0], &allPaths, &Farm[0])
+	for i := 0; i < len(allPaths); i++ {
+		allPaths = SortPaths(allPaths)
+	}
+	for i := 0; i < len(allPaths); i++ {
+		for k := 0; k < len(allPaths[i]); k++ {
+			fmt.Println(i, "thats the all sorted paths ", allPaths[i][k])
+		}
+	}
+
+	allPaths = ClearPath(allPaths)
+	
+
+	// for i := 0; i < len(cleanway); i++ {
+	// 	for k := 0; k < len(cleanway[i]); k++ {
+	// 		fmt.Println(i, "thats the all best paths ", cleanway[i][k])
+	// 	}
+	// }
+	for i := 0; i < childrenOfFirstRoom; i++ {
+		for p := 0; p < len(allPaths[i]); p++ {
+			fmt.Println(i, "cleanway", allPaths[i][p])
+		}
+	}
 }
