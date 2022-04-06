@@ -17,6 +17,9 @@ var (
 	way2                []*room
 	cleanway            [][]*room
 	childrenOfFirstRoom int
+	countloop           int
+	appendWays          []*room
+	CombinatedRooms     [][]*room
 )
 
 func CreatingAnts() []ant {
@@ -195,15 +198,36 @@ func SortPaths(ways [][]*room) [][]*room {
 // }
 
 func ClearPath(ways [][]*room) [][]*room {
+	var somebool bool = false
+	var anotherbool bool = false
 	childrenOfFirstRoom = len(firstRm.children)
-	var countofloop int
-	for i := countofloop + 1; i < len(ways); i++ {
-		for k := 0; k < len(ways[countofloop])-1; k++ {
-			for t := 0; t < len(ways[i])-1; t++ {
-				if ways[countofloop][k].name == ways[i][t].name {
-				}
+	if appendWays == nil {
+		appendWays = ways[0]
+	}
+	if CombinatedRooms == nil {
+		CombinatedRooms = append(CombinatedRooms, ways[0])
+	}
+	if countloop == len(ways)-1 {
+		return CombinatedRooms
+	}
+	for i := 0; i < len(ways[countloop+1]); i++ {
+		for k := 0; k < len(appendWays)-1; k++ {
+			if ways[countloop+1][i].name == appendWays[k].name {
+				somebool = true
+			}
+			if !somebool && i == len(ways[countloop+1])-1 && k == len(appendWays)-2 {
+				appendWays = append(appendWays, ways[countloop+1]...)
+				anotherbool = true
 			}
 		}
 	}
-	return ways
+	if anotherbool {
+		CombinatedRooms = append(CombinatedRooms, ways[countloop+1])
+	}
+	countloop++
+	for i := 0; i < len(appendWays); i++ {
+		fmt.Println("thatstheappendways", appendWays[i])
+	}
+	ClearPath(ways)
+	return CombinatedRooms
 }

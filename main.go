@@ -158,17 +158,28 @@ func main() {
 		}
 	}
 
-	allPaths = ClearPath(allPaths)
-	
+	cleanway = ClearPath(allPaths)
 
 	// for i := 0; i < len(cleanway); i++ {
 	// 	for k := 0; k < len(cleanway[i]); k++ {
 	// 		fmt.Println(i, "thats the all best paths ", cleanway[i][k])
 	// 	}
 	// }
-	for i := 0; i < childrenOfFirstRoom; i++ {
-		for p := 0; p < len(allPaths[i]); p++ {
-			fmt.Println(i, "cleanway", allPaths[i][p])
+
+	var anotherbool2 bool = false
+	for i := 0; i < len(appendWays); i++ {
+		for k := 0; k < len(allPaths[len(allPaths)-1]); k++ {
+			if allPaths[len(allPaths)-1][k] == appendWays[i] {
+				anotherbool2 = true
+			}
+		}
+	}
+	if !anotherbool2 {
+		cleanway = append(CombinatedRooms, allPaths[len(allPaths)-1])
+	}
+	for i := 0; i < len(cleanway); i++ {
+		for p := 0; p < len(cleanway[i]); p++ {
+			fmt.Println(i, "cleanway", cleanway[i][p])
 		}
 	}
 }
