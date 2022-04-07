@@ -149,6 +149,7 @@ func main() {
 
 	var allPaths [][]*room
 	FindAllPossiblePaths(make([]*room, 0), Farm[0], &allPaths, &Farm[0])
+	fmt.Println(len(allPaths))
 	for i := 0; i < len(allPaths); i++ {
 		allPaths = SortPaths(allPaths)
 	}
@@ -182,4 +183,18 @@ func main() {
 			fmt.Println(i, "cleanway", cleanway[i][p])
 		}
 	}
+	var Paths123 []Path
+	var Paths1234 [][]Path
+	Paths123 = FirstChildren(allPaths)
+	for i := 0; i < childrenOfFirstRoom; i++ {
+		Paths1234 = append(Paths1234, SortedPaths(Paths123, i))
+	}
+	Paths1234 = (SortAgain(Paths1234))
+	fmt.Println(Paths1234)
+	Paths1234 = AllCombinations(Paths1234)
+	fmt.Println(len(Paths1234))
+	for i := 0; i < len(Paths1234); i++ {
+		fmt.Println(i, Paths1234[i])
+	}
+	
 }

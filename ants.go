@@ -8,6 +8,11 @@ type ant struct {
 	pathOfAnt []*room
 }
 
+type Path struct {
+	id    int
+	paths []*room
+}
+
 var (
 	ants                []ant
 	roomspassed         int
@@ -230,4 +235,86 @@ func ClearPath(ways [][]*room) [][]*room {
 	}
 	ClearPath(ways)
 	return CombinatedRooms
+}
+
+func FirstChildren(ways [][]*room) []Path {
+	var PathStruct Path
+	var PathStruct2 []Path
+	childrenOfFirstRoom = len(firstRm.children)
+	for i := 0; i < len(ways); i++ {
+		for k := 0; k < childrenOfFirstRoom; k++ {
+			if ways[i][0] == firstRm.children[k] {
+				PathStruct.id = k
+				PathStruct.paths = ways[i]
+				PathStruct2 = append(PathStruct2, PathStruct)
+
+			}
+		}
+	}
+	return PathStruct2
+}
+
+func SortedPaths(way []Path, idChildren int) []Path {
+	var SepPath []Path
+	for i := 0; i < len(way); i++ {
+		if way[i].id == idChildren {
+			SepPath = append(SepPath, way[i])
+		}
+	}
+	return SepPath
+}
+
+func SortAgain(way [][]Path) [][]Path {
+	for i := 0; i < len(way)-1; i++ {
+		if len(way[i]) < len(way[i+1]) {
+			way[i], way[i+1] = way[i+1], way[i]
+		}
+	}
+	return way
+}
+
+func AllCombinations(way [][]Path) [][]Path {
+	var AnotherPath []Path
+	var AnotherPath2 [][]Path
+
+	if childrenOfFirstRoom == 3 {
+		for i := 0; i < len(way[0]); i++ {
+			for k := 0; k < len(way[1]); k++ {
+				for l := 0; l < len(way[2]); l++ {
+					AnotherPath = append(AnotherPath, way[0][i], way[1][k], way[2][l])
+
+					AnotherPath2 = append(AnotherPath2, AnotherPath)
+					AnotherPath = nil
+				}
+			}
+		}
+	} else if childrenOfFirstRoom == 4 {
+		for i := 0; i < len(way[0]); i++ {
+			for k := 0; k < len(way[1]); k++ {
+				for l := 0; l < len(way[2]); l++ {
+					for t := 0; t < len(way[3]); t++ {
+						AnotherPath = append(AnotherPath, way[0][i], way[1][k], way[2][l], way[3][t])
+
+						AnotherPath2 = append(AnotherPath2, AnotherPath)
+						AnotherPath = nil
+					}
+				}
+			}
+		}
+	}
+
+	return AnotherPath2
+}
+
+func FindIntersect(way [][]Path) [][]Path {
+	for i := 0; i < len(way); i++ {
+		for k := 0; k < len(way[i])-1; k++ {
+			for l := 0; l < len(way[i][k].paths); l++ {
+				if way[i][k].paths[l].name == way[i][k+1].paths[l].name {
+					way = append(way[:i], way[i+1:]...)
+				}
+			}
+		}
+	}
+	return way
 }
