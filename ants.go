@@ -6,11 +6,15 @@ type ant struct {
 	id        int
 	curRoom   *room
 	pathOfAnt []*room
+	step      int
 }
 
 type Path struct {
-	id    int
-	paths []*room
+	id        int
+	paths     []*room
+	intersect bool
+	queue     int
+	totalLen  int
 }
 
 var (
@@ -25,6 +29,9 @@ var (
 	countloop           int
 	appendWays          []*room
 	CombinatedRooms     [][]*room
+	BestCombinations    [][]Path
+	intersectbool       bool = false
+	BestPath            [][]*room
 )
 
 func CreatingAnts() []ant {
@@ -77,12 +84,14 @@ func walk(antfarm []ant) {
 		if antfarm[i].curRoom.name == lastRm.name {
 			continue
 		}
-		if antfarm[i].curRoom.children[0].occupied {
+		if antfarm[i].curRoom.name != firstRm.name {
+			antfarm[i].curRoom.occupied = false
+		}
+		if antfarm[i].pathOfAnt[antfarm[i].step].occupied {
 			continue
 		}
-
-		antfarm[i].curRoom.occupied = false
-		antfarm[i].curRoom = antfarm[i].curRoom.children[0]
+		antfarm[i].curRoom = antfarm[i].pathOfAnt[antfarm[i].step]
+		antfarm[i].step++
 		if antfarm[i].curRoom.name != lastRm.name {
 			antfarm[i].curRoom.occupied = true
 		}
@@ -91,6 +100,7 @@ func walk(antfarm []ant) {
 		fmt.Print("L", antfarm[i].id, "-", antfarm[i].curRoom.name, " ")
 
 	}
+
 	if allpassed {
 		return
 	} else {
@@ -107,19 +117,19 @@ func ShortestPath(rm *room) {
 	if rm.name != lastRm.name {
 		roomspassed++
 		for i := 0; i < len(rm.children); i++ {
-			fmt.Println(i)
+			// fmt.Println(i)
 			ShortestPath(rm.children[i])
 		}
 	} else {
-		fmt.Println(roomspassed)
-		fmt.Println(rm.name)
+		// fmt.Println(roomspassed)
+		// fmt.Println(rm.name)
 	}
 }
 
 func FindingPath(currentRoom *room) [][]*room {
 	if len(currentRoom.children) != 0 {
 		for i := 0; i < len(currentRoom.children); i++ {
-			fmt.Println("number of i", i, "room", *currentRoom, "child", *currentRoom.children[i])
+			// fmt.Println("number of i", i, "room", *currentRoom, "child", *currentRoom.children[i])
 			way2 = append(way2, currentRoom.children[i])
 			FindingPath(currentRoom.children[i])
 		}
@@ -230,9 +240,9 @@ func ClearPath(ways [][]*room) [][]*room {
 		CombinatedRooms = append(CombinatedRooms, ways[countloop+1])
 	}
 	countloop++
-	for i := 0; i < len(appendWays); i++ {
-		fmt.Println("thatstheappendways", appendWays[i])
-	}
+	// for i := 0; i < len(appendWays); i++ {
+	// 	fmt.Println("thatstheappendways", appendWays[i])
+	// }
 	ClearPath(ways)
 	return CombinatedRooms
 }
@@ -246,6 +256,7 @@ func FirstChildren(ways [][]*room) []Path {
 			if ways[i][0] == firstRm.children[k] {
 				PathStruct.id = k
 				PathStruct.paths = ways[i]
+				PathStruct.intersect = true
 				PathStruct2 = append(PathStruct2, PathStruct)
 
 			}
@@ -276,8 +287,16 @@ func SortAgain(way [][]Path) [][]Path {
 func AllCombinations(way [][]Path) [][]Path {
 	var AnotherPath []Path
 	var AnotherPath2 [][]Path
+	if childrenOfFirstRoom == 2 {
+		for i := 0; i < len(way[0]); i++ {
+			for k := 0; k < len(way[1]); k++ {
+				AnotherPath = append(AnotherPath, way[0][i], way[1][k])
+				AnotherPath2 = append(AnotherPath2, AnotherPath)
+				AnotherPath = nil
 
-	if childrenOfFirstRoom == 3 {
+			}
+		}
+	} else if childrenOfFirstRoom == 3 {
 		for i := 0; i < len(way[0]); i++ {
 			for k := 0; k < len(way[1]); k++ {
 				for l := 0; l < len(way[2]); l++ {
@@ -309,12 +328,84 @@ func AllCombinations(way [][]Path) [][]Path {
 func FindIntersect(way [][]Path) [][]Path {
 	for i := 0; i < len(way); i++ {
 		for k := 0; k < len(way[i])-1; k++ {
-			for l := 0; l < len(way[i][k].paths); l++ {
-				if way[i][k].paths[l].name == way[i][k+1].paths[l].name {
-					way = append(way[:i], way[i+1:]...)
+			for l := 0; l < len(way[i][k].paths)-1; l++ {
+				for t := 0; t < len(way[i][k+1].paths)-1; t++ {
+					if way[i][k].paths[l].name == way[i][k+1].paths[t].name {
+						way[i][k].intersect = false
+						way[i][k+1].intersect = false
+
+					}
 				}
 			}
 		}
 	}
 	return way
+}
+
+func FindBestCombinations(way [][]Path) [][]Path {
+	for i := 0; i < len(way); i++ {
+		intersectbool = false
+		for k := 0; k < len(way[i]); k++ {
+			if !way[i][k].intersect {
+				intersectbool = true
+			} else if k == len(way[i])-1 && !intersectbool {
+				BestCombinations = append(BestCombinations, way[i])
+			}
+		}
+	}
+	return BestCombinations
+}
+
+func PathtoRoom(way [][]Path) [][]*room {
+	if len(way) > 1 {
+		for i := 0; i < len(way)-1; i++ {
+			countofpaths := 0
+			for k := 0; k < len(way[i]); k++ {
+				countofpaths += len(way[i][k].paths)
+				way[i][k].totalLen = countofpaths
+			}
+		}
+		for i := 0; i < len(way)-1; i++ {
+			if way[i][len(way[i])-1].totalLen < way[i+1][len(way[i])-1].totalLen {
+				way[i], way[i+1] = way[i+1], way[i]
+			}
+		}
+	}
+	for i := 0; i < len(way[0]); i++ {
+		BestPath = append(BestPath, way[0][i].paths)
+	}
+
+	return BestPath
+}
+
+func SortBestPath(way [][]*room) [][]*room {
+	for i := 0; i < len(way)-1; i++ {
+		if len(way[i]) > len(way[i+1]) {
+			way[i], way[i+1] = way[i+1], way[i]
+		}
+	}
+	return way
+}
+
+func EqNum(ants []ant, Path [][]*room) [][]*room {
+	countofants := len(ants)
+	countofpaths := len(Path)
+	Path2 := Path
+	fmt.Println(countofants, countofpaths)
+	div := countofants / countofpaths
+	rem := countofants % countofpaths
+	for i := 0; i < div-1; i++ {
+		Path = append(Path, Path2...)
+	}
+	for i := 0; i < rem; i++ {
+		Path = append(Path, Path[i])
+	}
+	return Path
+}
+
+func Dist(ants []ant, Paths [][]*room) []ant {
+	for i := 0; i < len(ants); i++ {
+		ants[i].pathOfAnt = Paths[i]
+	}
+	return ants
 }
