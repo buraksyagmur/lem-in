@@ -191,18 +191,22 @@ func main() {
 	}
 	Paths1234 = (SortAgain(Paths1234))
 	// fmt.Println(Paths1234)
+
 	Paths1234 = AllCombinations(Paths1234)
-	// fmt.Println(len(Paths1234))
-	// for i := 0; i < len(Paths1234); i++ {
-	// 	fmt.Println(i, Paths1234[i])
-	// }
+
 	FindIntersect(Paths1234)
 
 	Paths1234 = FindBestCombinations(Paths1234)
 
 	BestPath = PathtoRoom(Paths1234)
 	BestPath = SortBestPath(BestPath)
-	BestPath = EqNum(antfarm, BestPath)
-	antfarm = Dist(antfarm, BestPath)
+	BestPath = FindAnotherIntersect(BestPath)
+	BestPath = FindAnotherIntersect(BestPath)
+	fmt.Println("222", BestPath)
+	antfarm = EqNum(antfarm, BestPath)
+	for i := 0; i < len(antfarm); i++ {
+		fmt.Println(antfarm[i].pathOfAnt)
+	}
+	// antfarm = Dist(antfarm, BestPath)
 	walk(antfarm)
 }

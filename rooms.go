@@ -10,6 +10,7 @@ type room struct {
 	name     string
 	children [](*room)
 	occupied bool
+	queue    int
 }
 
 var (
