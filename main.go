@@ -47,9 +47,11 @@ func readnote(textfile string) []string {
 		}
 	}
 	RoomsandConnections := strings.Split(string(content), "\n")
+
 	// RoomsandConnections = append(RoomsandConnections[3:endline], RoomsandConnections[endline+2:]...)
 	// including start and end room
 	RoomsandConnections = append(RoomsandConnections[2:endline], RoomsandConnections[endline+1:]...)
+
 	// fmt.Println(RoomsandConnections)
 	for l := 0; l < len(RoomsandConnections); l++ {
 		for t := 0; t < len(RoomsandConnections[l]); t++ {
@@ -80,6 +82,10 @@ func readnote(textfile string) []string {
 func main() {
 	roomsandConnections := readnote(os.Args[1])
 	numOfAnt, _ = strconv.Atoi(slccontent[0])
+	if numOfAnt == 0 {
+		fmt.Println("Ant Number 0 - Check The Ant Number")
+		os.Exit(0)
+	}
 	// fmt.Println("ant number:", slccontent[0])
 	// fmt.Println("startroom:", slccontent[startline+1])
 	// for i := 1; i < connectionStartLine; i++ { // exclude the start room
@@ -104,9 +110,9 @@ func main() {
 	SwapFarm(Farm)
 	Farm = append(Farm, *lastRm)
 	numberofRooms = len(Farm)
-	for i := 0; i < len(Farm); i++ {
-		fmt.Println(i, Farm[i])
-	}
+	// for i := 0; i < len(Farm); i++ {
+	// 	fmt.Println(i, Farm[i])
+	// }
 
 	// fmt.Println("allpath", FindingPath(firstRm))
 	// fmt.Println("numberofways", len(allways))
@@ -202,11 +208,11 @@ func main() {
 	BestPath = SortBestPath(BestPath)
 	BestPath = FindAnotherIntersect(BestPath)
 	BestPath = FindAnotherIntersect(BestPath)
-	fmt.Println("222", BestPath)
+	// fmt.Println("222", BestPath)
 	antfarm = EqNum(antfarm, BestPath)
-	for i := 0; i < len(antfarm); i++ {
-		fmt.Println(antfarm[i].pathOfAnt)
-	}
+	// for i := 0; i < len(antfarm); i++ {
+	// 	fmt.Println(antfarm[i].pathOfAnt)
+	// }
 	// antfarm = Dist(antfarm, BestPath)
 	walk(antfarm)
 }

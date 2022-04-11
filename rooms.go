@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -60,6 +61,13 @@ func Rooms(roomsandConnections []string) *room {
 			}
 		}
 	}
+	for i := 0; i < len(beginConnRmNames); i++ {
+		if beginConnRmNames[i] == destConnRmNames[i] {
+			fmt.Println("Some Rooms Linked to Themselves")
+			os.Exit(1)
+
+		}
+	}
 	// fmt.Println("roomname", destConnRmNames)
 	antFarmRooms = addRoom(antFarmRooms, startRmName, startRmName, endRmName, beginConnRmNames, destConnRmNames)
 	return antFarmRooms
@@ -82,7 +90,7 @@ func findChildren(roomToAdd *room, rmToAddName string, startRmName, endRmName st
 		if beginRmName == rmToAddName {
 			// fmt.Println("dsf", childrenRm)
 			destRmName := destConnRmNames[c]
-			fmt.Printf("Adding new child room (%s) from the %dth connection to %s\n", destRmName, c, rmToAddName)
+			// fmt.Printf("Adding new child room (%s) from the %dth connection to %s\n", destRmName, c, rmToAddName)
 			// fmt.Println(childrenRm)
 			// childrenRm = append(childrenRm, &room{
 			// 	parent:   roomToAdd,
@@ -104,11 +112,11 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 	var anotherbool bool = false
 	checkdup = append(checkdup, rmToAddName)
 	if rmToAddName == endRmName { // end room / base case
-		fmt.Println("___________________________________________________")
-		fmt.Printf("constructing end room %s...\n", rmToAddName)
+		// fmt.Println("___________________________________________________")
+		// fmt.Printf("constructing end room %s...\n", rmToAddName)
 		test = nil
 		test = append(test, root)
-		fmt.Println(rmToAddName)
+		// fmt.Println(rmToAddName)
 		if firstendrm == 0 {
 			lastRm = &room{
 				parent:   test,
@@ -126,10 +134,10 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 					lastRm.parent[t].children = root.children
 					lastRm.parent[t].parent = root.parent
 					endroomparent = true
-					fmt.Println(endroomparent)
+					// fmt.Println(endroomparent)
 				} else if t == parentnumber-1 && !endroomparent {
 					lastRm.parent = append(lastRm.parent, root)
-					fmt.Println("endroomappenused")
+					// fmt.Println("endroomappenused")
 				}
 			}
 			// fmt.Println("bool2", endroomparent)
@@ -151,8 +159,8 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		return lastRm
 
 	} else if rmToAddName == startRmName { // start Room special case
-		fmt.Println("___________________________________________________")
-		fmt.Printf("constructing start room %s...\n", rmToAddName)
+		// fmt.Println("___________________________________________________")
+		// fmt.Printf("constructing start room %s...\n", rmToAddName)
 		firstRm = &room{
 			parent:   nil,
 			name:     rmToAddName,
@@ -163,11 +171,11 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 		//  fmt.Println("firstroom", *firstRm)
 		Farm = append(Farm, *firstRm)
 	} else {
-		fmt.Println("___________________________________________________")
-		fmt.Printf("constructing other room %s...\n", rmToAddName)
+		// fmt.Println("___________________________________________________")
+		// fmt.Printf("constructing other room %s...\n", rmToAddName)
 		test = nil
 		test = append(test, root)
-		fmt.Println("---------roomtoadd--------", roomToAdd)
+		// fmt.Println("---------roomtoadd--------", roomToAdd)
 		if len(dup(checkdup)) != 0 {
 			for i := 0; i < len(dup(checkdup)); i++ {
 				if (dup(checkdup)[i]) == rmToAddName {
@@ -191,7 +199,7 @@ func addRoom(root *room, rmToAddName string, startRmName, endRmName string, begi
 								if roomToAdd.parent[u].name == root.name {
 									roomToAdd.parent[u].parent = root.parent
 									roomToAdd.parent[u].children = root.children
-									fmt.Println("sameparent")
+									// fmt.Println("sameparent")
 									anotherbool = true
 
 								} else if u == numberofparents-1 && !anotherbool {

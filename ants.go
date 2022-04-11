@@ -367,9 +367,9 @@ func FindBestCombinations(way [][]Path) [][]Path {
 		intersectbool = false
 		for k := 0; k < len(way[i]); k++ {
 			for t := 0; t < len(way[i][k].paths); t++ {
-				fmt.Println(way[i][k].paths[t])
+				// fmt.Println(way[i][k].paths[t])
 			}
-			fmt.Println("")
+			// fmt.Println("")
 			if !way[i][k].intersect {
 				intersectbool = true
 			} else if k == len(way[i])-1 && !intersectbool {
@@ -377,7 +377,7 @@ func FindBestCombinations(way [][]Path) [][]Path {
 				// fmt.Println("BestComb", BestCombinations)
 			}
 		}
-		fmt.Println("")
+		// fmt.Println("")
 	}
 	if BestCombinations == nil {
 		BestCombinations = append(BestCombinations, way[0])
@@ -466,7 +466,7 @@ func FindAnotherIntersect(way [][]*room) [][]*room {
 		for k := 0; k < len(way[i])-1; k++ {
 			for t := 0; t < len(way[i+1])-1; t++ {
 				if way[i][k].name == way[i+1][t].name {
-					fmt.Println("elimination")
+					// fmt.Println("elimination")
 					way = append(way[:i+1], way[i+2:]...)
 					break
 				}
