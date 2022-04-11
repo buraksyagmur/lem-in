@@ -83,7 +83,7 @@ func main() {
 	roomsandConnections := readnote(os.Args[1])
 	numOfAnt, _ = strconv.Atoi(slccontent[0])
 	if numOfAnt == 0 {
-		fmt.Println("Ant Number 0 - Check The Ant Number")
+		fmt.Println("ERROR\nAnt Number 0 - Check The Ant Number")
 		os.Exit(0)
 	}
 	// fmt.Println("ant number:", slccontent[0])

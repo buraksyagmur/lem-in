@@ -63,8 +63,8 @@ func Rooms(roomsandConnections []string) *room {
 	}
 	for i := 0; i < len(beginConnRmNames); i++ {
 		if beginConnRmNames[i] == destConnRmNames[i] {
-			fmt.Println("Some Rooms Linked to Themselves")
-			os.Exit(1)
+			fmt.Println("ERROR\nSome Rooms Linked to Themselves")
+			os.Exit(0)
 
 		}
 	}
