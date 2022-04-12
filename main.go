@@ -14,12 +14,13 @@ var (
 	endline             int
 	slccontent          []string
 	connectionStartLine int
-	// RoomsandConnections []string
-	numOfAnt      int
-	nameofStart   string
-	nameofEnd     string
-	numberofRooms int
-	antFarmRooms  *room
+	numOfAnt            int
+	nameofStart         string
+	nameofEnd           string
+	numberofRooms       int
+	antFarmRooms        *room
+	startroombool       = false
+	endroombool         = false
 )
 
 func readnote(textfile string) []string {
@@ -27,7 +28,8 @@ func readnote(textfile string) []string {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	// fmt.Println(string(content))
+	// fmt.Println("")
 	slccontent = strings.Split(string(content), "\n")
 	for l := 0; l < len(slccontent); l++ {
 		for t := 0; t < len(slccontent[l]); t++ {
@@ -38,9 +40,17 @@ func readnote(textfile string) []string {
 				for i := 0; i < len(slccontent); i++ {
 					if slccontent[i] == "##start" {
 						startline = i
+						startroombool = true
+					} else if !startroombool && i == len(slccontent)-1 {
+						fmt.Println("ERROR\nCheck the ##Start ")
+						os.Exit(0)
 					}
 					if slccontent[i] == "##end" {
 						endline = i
+						endroombool = true
+					} else if !endroombool && i == len(slccontent)-1 {
+						fmt.Println("ERROR\nCheck the ##End ")
+						os.Exit(0)
 					}
 				}
 			}
@@ -80,6 +90,10 @@ func readnote(textfile string) []string {
 }
 
 func main() {
+	if len(os.Args) != 2 {
+		fmt.Println("ERROR\nCheck the argument")
+		os.Exit(0)
+	}
 	roomsandConnections := readnote(os.Args[1])
 	numOfAnt, _ = strconv.Atoi(slccontent[0])
 	if numOfAnt == 0 {
